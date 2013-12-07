@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.rhok.pta.sifiso.donatemystuff"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.MainActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.BookDonateActivity"
+            android:label="@string/title_activity_book_donate" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.ClothDonationActivity"
+            android:label="@string/title_activity_cloth_donation" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.ShoesDonationActivity"
+            android:label="@string/title_activity_shoes_donation" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.RegisterDonorActivity"
+            android:label="@string/title_activity_register_donor" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.BlanketDonationActivity"
+            android:label="@string/title_activity_blanket_donation" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.UniformsDonationActivity"
+            android:label="@string/title_activity_uniforms_donation" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.FragmentRequest"
+            android:label="@string/title_activity_fragment_request" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.LoginActivity"
+            android:label="@string/title_activity_login" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.ViewRequestActivity"
+            android:label="@string/title_activity_view_request" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.UnbiddedRequestActivity"
+            android:label="@string/title_activity_unbidded_request" >
+        </activity>
+    </application>
+
+</manifest>

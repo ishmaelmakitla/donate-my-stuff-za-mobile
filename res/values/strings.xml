@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Donate Menu</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+    <string name="hinter">type</string>
+    <string name="blazer">Blazer?</string>
+    <string name="add">add</string>
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Donate</item>
+        <item>Donation Request</item>
+        <item>Donation Offer</item>
+        <item>Items Donated</item>
+        <item>My Donation</item>
+        <item>All Donation</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_people</item>
+        <item>@drawable/ic_photos</item>
+        <item>@drawable/ic_communities</item>
+        <item>@drawable/ic_pages</item>
+        <item>@drawable/ic_whats_hot</item>
+        <item>@drawable/ic_whats_hot</item>
+    </array>
+
+    <string-array name="donatio_items">
+        <item>Books</item>
+        <item>Clothes</item>
+        <item>Shoes</item>
+        <item>Blankets</item>
+        <item>Uniforms</item>
+    </string-array>
+    <string-array name="gender_data">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Any</item>
+    </string-array>
+    <string-array name="uniform_upper">
+        <item>T-Shirt Longsleeve</item>
+        <item>T-Shirt Shortsleeve</item>
+        <item>Shirt Longsleeve</item>
+        <item>Shirt Shortsleeve</item>
+    </string-array>
+    <string-array name="uniform_pants">
+        <item>Long Pants</item>
+        <item>Short Pants</item>
+    </string-array>
+    <string-array name="get_type">
+        <item>SELECT USER ROLE</item>
+    </string-array>
+    <string-array name="get_type_donor">
+        <item>INDIVIDUAL_DONOR</item>
+    </string-array>
+    <string-array name="get_type_Beneficiary">
+        <item>INDIVIDUAL_BENEFICIARY</item>
+    </string-array>
+    <string-array name="get_provinces">
+        <item>Eastern Cape</item>
+        <item>Free State</item>
+        <item>Gauteng</item>
+        <item>Kwa-Zulu Natal</item>
+        <item>Limpopo Province</item>
+        <item>Mpumalanga</item>
+        <item>North West</item>
+        <item>Northern Cape</item>
+        <item>Western Cape</item>
+    </string-array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    <!-- <string name="title_activity_donate_fragment">DonateFragment</string> -->
+
+    <string name="title_activity_book_donate">BookDonateActivity</string>
+    <string name="title_activity_cloth_donation">ClothDonationActivity</string>
+    <string name="title_activity_shoes_donation">ShoesDonationActivity</string>
+    <string name="title_activity_register_donor">RegisterDonorActivity</string>
+    <string name="title_activity_blanket_donation">BlanketDonationActivity</string>
+    <string name="title_activity_uniforms_donation">UniformsDonationActivity</string>
+    <string name="title_activity_fragment_request">FragmentRequest</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_view_request">ViewRequestActivity</string>
+    <string name="title_activity_unbidded_request">UnbiddedRequestActivity</string>
+
+</resources>
