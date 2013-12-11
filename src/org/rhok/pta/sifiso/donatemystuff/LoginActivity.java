@@ -55,7 +55,6 @@ public class LoginActivity extends Activity {
 	}
 
 	private OnClickListener logSubmitListner = new OnClickListener() {
-
 		@Override
 		public void onClick(View v) {
 
