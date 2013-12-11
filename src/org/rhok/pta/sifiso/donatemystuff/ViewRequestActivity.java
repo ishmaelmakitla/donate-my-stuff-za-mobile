@@ -1,12 +1,10 @@
 package org.rhok.pta.sifiso.donatemystuff;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.rhok.pta.sifiso.donatemystuff.adapter.OfferAdapter;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationOffer;
 
 import android.app.Activity;
@@ -20,7 +18,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -35,6 +32,7 @@ public class ViewRequestActivity extends Activity {
 
 	private static final String GET_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/donationoffers";
 	private ListView listRequest;
+	private OfferAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,59 +70,58 @@ public class ViewRequestActivity extends Activity {
 		queue.add(request);
 
 	}
-	/*Deserialize a json string
-	 * */
+
+	/*
+	 * Deserialize a json string
+	 */
 	private void processDonationOffers(String offers) throws JSONException {
 
-		if(!offers.startsWith("{") && !offers.endsWith("}")){
-			offers = "{ \"offers\":"+offers+"}";
+		if (!offers.startsWith("{") && !offers.endsWith("}")) {
+			offers = "{ \"offers\":" + offers + "}";
 		}
 
 		Gson gson = new Gson();
-		
-    //    JSONArray jo= gson.fromJson(offers, JSONArray.class);
-        JsonParser parser = new JsonParser();
-        
-        JsonObject offersObject = gson.fromJson(offers, JsonObject.class);
-        Log.d(TAG, "offersObject = "+offersObject);
-        JsonElement jel = parser.parse(offers); // offersObject.get("offers");
-        JsonArray jo =null;
-        
-        if(jel != null){
-        	Log.d(TAG, "jel = "+jel);
-        	//JsonElement offersArray = jel.getAsJsonObject().get("offers").getAsJsonArray();
-        	jo = jel.getAsJsonObject().get("offers").getAsJsonArray(); //jel.getAsJsonArray();
-        	if(jo != null)
-        	Log.d(TAG, "jo.get(0) = "+jo.get(1).toString());
-        }
-        
-        
-        if(jo != null){
-        	Log.d(TAG, "Parsed JSON successfully");
-        	
-        	//	JsonArray jo = parser.parse(jsonOffers).getAsJsonArray();
-        	//	Log.d(TAG, jo.toString());
-        		List<DonationOffer> donationOfferList = new ArrayList<DonationOffer>();
 
-        			Log.d(TAG, "Hello World");
+		JsonParser parser = new JsonParser();
 
-        			if (jo.size() >0) {
-        				
-        				for (int x = 0; x < jo.size(); x++) {
-        					JsonObject offerItem = (JsonObject)jo.get(x);
-        					DonationOffer donationOffer = gson.fromJson(
-        							offerItem.toString(), DonationOffer.class);
-        					donationOfferList.add(donationOffer);
-        					Log.d(TAG, donationOfferList.get(x).getDonorId());
-        				}
-        			}
+		JsonElement jel = parser.parse(offers);
+		JsonArray jo = null;
 
-        	return;
-        }
-        
-        
-        Log.e(TAG, "Could Not Parse As JSON-Array? Jo = NULL:: \n"+offers);
-		
+		if (jel != null) {
+
+			jo = jel.getAsJsonObject().get("offers").getAsJsonArray();
+			if (jo != null) {
+				Log.d(TAG, "Parsed JSON successfully");
+
+				List<DonationOffer> donationOfferList = new ArrayList<DonationOffer>();
+				if (jo.size() > 0) {
+
+					for (int x = 0; x < jo.size(); x++) {
+						JsonObject offerItem = (JsonObject) jo.get(x);
+						DonationOffer donationOffer = gson.fromJson(
+								offerItem.toString(), DonationOffer.class);
+						donationOfferList.add(donationOffer);
+						Log.d(TAG, donationOfferList.get(x).getDonorId());
+					}
+					listAdapter(donationOfferList);
+				}
+
+				return;
+			}
+
+		}
+
+		Log.e(TAG, "Could Not Parse As JSON-Array? Jo = NULL:: \n" + offers);
+
+	}
+
+	private void listAdapter(List<DonationOffer> list) {
+		if (list == null) {
+			list = new ArrayList<DonationOffer>();
+		}
+		adapter = new OfferAdapter(getApplicationContext(),
+				R.layout.customize_offer_list, list);
+		listRequest.setAdapter(adapter);
 	}
 
 	@Override

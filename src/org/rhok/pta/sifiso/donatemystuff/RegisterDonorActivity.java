@@ -6,8 +6,10 @@ import org.json.JSONObject;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 
@@ -68,7 +71,7 @@ public class RegisterDonorActivity extends Activity {
 		// RadioGroup
 		rdRole = (RadioGroup) findViewById(R.id.rdRole);
 		rdRole.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
+
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				// TODO Auto-generated method stub
@@ -77,7 +80,7 @@ public class RegisterDonorActivity extends Activity {
 		});
 		// buttons
 		registerSubmit = (Button) findViewById(R.id.registerSubmit);
-		registerSubmit.setOnClickListener(registerSubmitListner);	
+		registerSubmit.setOnClickListener(registerSubmitListner);
 		logingSubmit = (Button) findViewById(R.id.logingSubmit);
 		setSpinners();
 	}
@@ -92,19 +95,23 @@ public class RegisterDonorActivity extends Activity {
 				offerJson = createOfferJSON();
 
 				JsonObjectRequest request = new JsonObjectRequest(
-						Request.Method.POST, MAKE_DONATION_OFFER_SERVLET_URL
-								, offerJson,
-						new Response.Listener<JSONObject>() {
+						Request.Method.POST, MAKE_DONATION_OFFER_SERVLET_URL,
+						offerJson, new Response.Listener<JSONObject>() {
 
 							@Override
 							public void onResponse(JSONObject response) {
 								Log.d(TAG, response.toString());
+
+								Toast.makeText(getApplicationContext(),
+										"Registered successfully",
+										Toast.LENGTH_LONG).show();
 							}
 						}, new Response.ErrorListener() {
 
 							@Override
 							public void onErrorResponse(VolleyError error) {
 								Log.e(TAG, "issues with server", error);
+								error.getMessage();
 								error.printStackTrace();
 
 							}

@@ -21,8 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class LoginActivity extends Activity {
-	private static final String TAG = LoginActivity.class
-			.getSimpleName();
+	private static final String TAG = LoginActivity.class.getSimpleName();
 
 	private static final String MAKE_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/login";
 
@@ -48,7 +47,7 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(),
-						MainActivity.class));
+						RegisterDonorActivity.class));
 
 			}
 		});
@@ -73,10 +72,14 @@ public class LoginActivity extends Activity {
 							public void onResponse(JSONObject response) {
 								Log.d(TAG, response.toString());
 								try {
-									if (response.getInt("id")>0) {
+									if (response.getInt("status") == 100) {
+										Bundle b = new Bundle();
+										b.putString("message",
+												response.getString("message"));
 										startActivity(new Intent(
 												getApplicationContext(),
-												MainActivity.class));
+												MainActivity.class)
+												.putExtras(b));
 									}
 								} catch (JSONException e) {
 									// TODO Auto-generated catch block

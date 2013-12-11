@@ -22,9 +22,8 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 	private Context context;
 	private int mResource;
 
-	public OfferAdapter(Context context, int resource, int textViewResourceId,
-			List<DonationOffer> offer) {
-		super(context, resource, textViewResourceId, offer);
+	public OfferAdapter(Context context, int resource, List<DonationOffer> offer) {
+		super(context, resource, offer);
 		this.context = context;
 		mResource = resource;
 		donationOffers = offer;
@@ -36,25 +35,30 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Holder holder;
-		if(convertView == null){
+		if (convertView == null) {
 			holder = new Holder();
 			convertView = inflater.inflate(mResource, parent, false);
-			holder.describtion = (TextView) convertView.findViewById(R.id.description);
+			holder.describtion = (TextView) convertView
+					.findViewById(R.id.description);
+			holder.size = (TextView) convertView.findViewById(R.id.size);
+			holder.quantity = (TextView) convertView
+					.findViewById(R.id.quantity);
 			convertView.setTag(holder);
-		}
-		else{
+		} else {
 			holder = (Holder) convertView.getTag();
 		}
-		
+
 		final DonationOffer dOffer = donationOffers.get(position);
-		for(int i=0; i< donationOffers.size();i++){
-			
-		}
+		holder.describtion.setText(dOffer.getItem().getName());
+		holder.size.setText("Size " + dOffer.getItem().getSize());
+		holder.quantity.setText("Quantity " + dOffer.getQuantity());
 		return convertView;
 	}
 
 	class Holder {
 		TextView describtion;
+		TextView size;
+		TextView quantity;
 	}
 
 }

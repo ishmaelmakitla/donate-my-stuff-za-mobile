@@ -127,7 +127,8 @@
                 android:id="@+id/passowrd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp" />
+                android:layout_marginTop="7dp" 
+                android:inputType="textPassword"/>
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"

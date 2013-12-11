@@ -80,8 +80,8 @@ public final class R {
         public static final int uniform=0x7f020016;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0048;
-        public static final int add=0x7f0a0042;
+        public static final int action_settings=0x7f0a0049;
+        public static final int add=0x7f0a0043;
         public static final int areaname=0x7f0a0029;
         public static final int blanketSubmit=0x7f0a0004;
         public static final int bookAge=0x7f0a0009;
@@ -98,15 +98,15 @@ public final class R {
         public static final int clothQuantity=0x7f0a0011;
         public static final int clothSize=0x7f0a000f;
         public static final int clothSubmit=0x7f0a0012;
-        public static final int counter=0x7f0a0046;
+        public static final int counter=0x7f0a0047;
         public static final int create_account=0x7f0a0016;
         public static final int description=0x7f0a003f;
         public static final int drawer_layout=0x7f0a0017;
-        public static final int edtUser=0x7f0a0043;
+        public static final int edtUser=0x7f0a0044;
         public static final int email=0x7f0a001f;
         public static final int frame_container=0x7f0a0018;
-        public static final int gridview=0x7f0a0040;
-        public static final int icon=0x7f0a0044;
+        public static final int gridview=0x7f0a0041;
+        public static final int icon=0x7f0a0045;
         public static final int imageView1=0x7f0a0001;
         public static final int item=0x7f0a003d;
         public static final int listRequest=0x7f0a003b;
@@ -130,6 +130,7 @@ public final class R {
         public static final int shoeQuantity=0x7f0a0031;
         public static final int shoeSize=0x7f0a002f;
         public static final int shoeSubmit=0x7f0a0032;
+        public static final int size=0x7f0a0040;
         public static final int spGender=0x7f0a001c;
         public static final int spProvince=0x7f0a002b;
         public static final int spType=0x7f0a0025;
@@ -141,9 +142,9 @@ public final class R {
         public static final int textView3=0x7f0a0008;
         public static final int textView4=0x7f0a000b;
         public static final int textView6=0x7f0a0034;
-        public static final int title=0x7f0a0045;
-        public static final int txtLabel=0x7f0a0047;
-        public static final int type=0x7f0a0041;
+        public static final int title=0x7f0a0046;
+        public static final int txtLabel=0x7f0a0048;
+        public static final int type=0x7f0a0042;
         public static final int uniformGender=0x7f0a0037;
         public static final int uniformPants=0x7f0a0035;
         public static final int uniformQuantity=0x7f0a0038;
