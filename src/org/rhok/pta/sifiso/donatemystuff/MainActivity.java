@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import org.rhok.pta.sifiso.donatemystuff.adapter.NavDrawerListAdapter;
 import org.rhok.pta.sifiso.donatemystuff.model.NavDrawerItem;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -180,7 +182,8 @@ public class MainActivity extends Activity {
 			break;
 		case 2:
 			Log.d("check", "skdfgjdlg1" + position);
-			fragment = new FragmentRequest();
+			startActivity(new Intent(getApplicationContext(), ViewRequestActivity.class));
+			//fragment = new FragmentRequest();
 			break;
 		
 

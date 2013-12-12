@@ -101,7 +101,7 @@ public class ViewRequestActivity extends Activity {
 						DonationOffer donationOffer = gson.fromJson(
 								offerItem.toString(), DonationOffer.class);
 						donationOfferList.add(donationOffer);
-						Log.d(TAG, donationOfferList.get(x).getDonorId());
+						//Log.d(TAG, donationOfferList.get(x).getDonorId());
 					}
 					listAdapter(donationOfferList);
 				}

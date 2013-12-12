@@ -14,8 +14,8 @@
     <string-array name="nav_drawer_items">
         <item>Home</item>
         <item>Donate</item>
-        <item>Donation Request</item>
-        <item>Donation Offer</item>
+        <item>Donation Offers</item>
+        <item>Donation Requests</item>
         <item>Items Donated</item>
         <item>My Donation</item>
         <item>All Donation</item>
@@ -43,7 +43,6 @@
     <string-array name="gender_data">
         <item>Male</item>
         <item>Female</item>
-       
     </string-array>
     <string-array name="uniform_upper">
         <item>T-Shirt Longsleeve</item>
@@ -91,5 +90,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_view_request">ViewRequestActivity</string>
     <string name="title_activity_unbidded_request">UnbiddedRequestActivity</string>
+    <string name="title_activity_detail_item_view">DetailItemViewActivity</string>
+    <string name="title_activity_make_request">MakeRequestActivity</string>
 
 </resources>

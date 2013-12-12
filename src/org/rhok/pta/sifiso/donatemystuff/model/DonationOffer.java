@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
@@ -30,30 +29,6 @@ public class DonationOffer {
 		//
 		this.id = UUID.randomUUID().toString();
 		this.offerdate = new Date();
-	}
-
-	public String getDonorid() {
-		return donorid;
-	}
-
-	public void setDonorid(String donorid) {
-		this.donorid = donorid;
-	}
-
-	public String getDonationrequestid() {
-		return donationrequestid;
-	}
-
-	public void setDonationrequestid(String donationrequestid) {
-		this.donationrequestid = donationrequestid;
-	}
-
-	public Date getOfferdate() {
-		return offerdate;
-	}
-
-	public void setOfferdate(Date offerdate) {
-		this.offerdate = offerdate;
 	}
 
 	public boolean isDeliver() {

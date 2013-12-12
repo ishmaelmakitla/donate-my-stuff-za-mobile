@@ -108,8 +108,8 @@ public class LoginActivity extends Activity {
 	private JSONObject createOfferJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 
-		json.put("username", log_username.getText().toString());
-		json.put("password", log_password.getText().toString());
+		json.put("username", "thabi");//log_username.getText().toString());
+		json.put("password", "thabi");//log_password.getText().toString());
 
 		Log.d(TAG, "Returning donation offer json=" + json);
 

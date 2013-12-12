@@ -65,6 +65,14 @@
             android:name="org.rhok.pta.sifiso.donatemystuff.UnbiddedRequestActivity"
             android:label="@string/title_activity_unbidded_request" >
         </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.DetailItemViewActivity"
+            android:label="@string/title_activity_detail_item_view" >
+        </activity>
+        <activity
+            android:name="org.rhok.pta.sifiso.donatemystuff.MakeRequestActivity"
+            android:label="@string/title_activity_make_request" >
+        </activity>
     </application>
 
 </manifest>
