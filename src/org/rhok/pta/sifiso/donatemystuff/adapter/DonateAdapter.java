@@ -3,18 +3,14 @@ package org.rhok.pta.sifiso.donatemystuff.adapter;
 import org.rhok.pta.sifiso.donatemystuff.BlanketDonationActivity;
 import org.rhok.pta.sifiso.donatemystuff.BookDonateActivity;
 import org.rhok.pta.sifiso.donatemystuff.ClothDonationActivity;
-import org.rhok.pta.sifiso.donatemystuff.FragmentDonate;
-import org.rhok.pta.sifiso.donatemystuff.HomeFragment;
-
 import org.rhok.pta.sifiso.donatemystuff.R;
 import org.rhok.pta.sifiso.donatemystuff.ShoesDonationActivity;
-import org.rhok.pta.sifiso.donatemystuff.UniformsDonationActivity;
+import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 import org.rhok.pta.sifiso.donatemystuff.util.FontChanger;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,18 +20,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 public class DonateAdapter extends BaseAdapter {
 
 	public enum DonationType {
-		SHOES, CLOTHES, BOOKS, UNIFORM, BLANKES
+		SHOES, CLOTHES, BOOKS,  BLANKETS
 	};
 
 	private Context context;
 	private String[] items;
 	private static final int[] mThumbIds = { R.drawable.books,
 			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets,
-			R.drawable.uniform };
+			};
 
 	public DonateAdapter(Context context) {
 		this.context = context;
@@ -105,11 +106,9 @@ public class DonateAdapter extends BaseAdapter {
 			donationType = DonationType.SHOES;
 			break;
 		case 3:
-			donationType = DonationType.BLANKES;
+			donationType = DonationType.BLANKETS;
 			break;
-		case 4:
-			donationType = DonationType.UNIFORM;
-			break;
+		
 		}
 
 		return donationType;
@@ -136,6 +135,8 @@ public class DonateAdapter extends BaseAdapter {
 		@Override
 		public void onClick(View view) {
 			Intent intent = null;
+			Bundle bundle = new Bundle();
+			bundle.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_OFFERS_LIST);
 			DonationType type = deriveDonationType(position);
 
 			Log.d(DonateAdapter.class.getSimpleName(),
@@ -146,7 +147,7 @@ public class DonateAdapter extends BaseAdapter {
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 				break;
-			case BLANKES:
+			case BLANKETS:
 				intent = new Intent(context, BlanketDonationActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
@@ -158,13 +159,11 @@ public class DonateAdapter extends BaseAdapter {
 				intent = new Intent(context, ShoesDonationActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
-			case UNIFORM:
-				intent = new Intent(context, UniformsDonationActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				break;
+			
 			}
 
 			if (intent != null) {
+				intent.putExtras(bundle);
 				context.startActivity(intent);
 			}
 

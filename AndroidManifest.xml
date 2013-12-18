@@ -58,7 +58,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.rhok.pta.sifiso.donatemystuff.ViewRequestActivity"
+            android:name="org.rhok.pta.sifiso.donatemystuff.ViewDonationActivity"
             android:label="@string/title_activity_view_request" >
         </activity>
         <activity

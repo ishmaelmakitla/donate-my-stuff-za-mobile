@@ -19,7 +19,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 public class LoginActivity extends Activity {
 	private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -48,6 +53,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(),
 						RegisterDonorActivity.class));
+				finish();
 
 			}
 		});
@@ -108,8 +114,8 @@ public class LoginActivity extends Activity {
 	private JSONObject createOfferJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 
-		json.put("username", "thabi");//log_username.getText().toString());
-		json.put("password", "thabi");//log_password.getText().toString());
+		json.put("username", "thabi");// log_username.getText().toString());
+		json.put("password", "thabi");// log_password.getText().toString());
 
 		Log.d(TAG, "Returning donation offer json=" + json);
 

@@ -13,12 +13,12 @@
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
         <item>Home</item>
-        <item>Donate</item>
-        <item>Donation Offers</item>
-        <item>Donation Requests</item>
-        <item>Items Donated</item>
-        <item>My Donation</item>
-        <item>All Donation</item>
+        <item>Make Donation</item>
+        <item>Request Donation</item>        
+        <item>My Donations Requests</item>
+        <item>My Donations Offers</item>
+        <item>All Donation Offers</item>
+        <item>All Donation Requests</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -92,5 +92,8 @@
     <string name="title_activity_unbidded_request">UnbiddedRequestActivity</string>
     <string name="title_activity_detail_item_view">DetailItemViewActivity</string>
     <string name="title_activity_make_request">MakeRequestActivity</string>
+    
+    <string name="prompt_label_request">Please Specify How Many of the Offered Items You Need</string>
+    <string name="prompt_label_offer">Please Specify How Many of the Requested Items You Are Offering</string>
 
 </resources>

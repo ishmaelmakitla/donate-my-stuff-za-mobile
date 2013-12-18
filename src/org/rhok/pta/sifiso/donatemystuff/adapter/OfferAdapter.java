@@ -19,7 +19,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 
 	private List<DonationOffer> donationOffers;
@@ -62,6 +67,10 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 			@Override
 			public void onClick(View v) {
 				Bundle bundle = new Bundle();
+				
+				//new: instead of putting each field in a bundle, put the whole object as a serializable
+				bundle.putSerializable("offer", dOffer);
+				
 				bundle.putString("id", dOffer.getId());
 				bundle.putString("donorid", dOffer.getDonorId());
 				bundle.putString("donationrequestid",
@@ -71,8 +80,7 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 				bundle.putString("itemid", dOffer.getItem().getId());
 
 				bundle.putLong("age", dOffer.getItem().getAge());
-				bundle.putInt("agerestriction", dOffer.getItem()
-						.getAgeRestriction());
+				bundle.putInt("agerestriction", dOffer.getItem().getAgeRestriction());
 				bundle.putString("name", dOffer.getItem().getName());
 				bundle.putInt("gendercode", dOffer.getItem().getGenderCode());
 				bundle.putString("type", dOffer.getItem().getType());

@@ -21,7 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 public class MainActivity extends Activity {
 
 	private DrawerLayout mDrawerLayout;
@@ -64,17 +69,30 @@ public class MainActivity extends Activity {
 		// Home
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons
 				.getResourceId(0, -1)));
-		// Donate
+		//Make a Donate
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons
 				.getResourceId(1, -1)));
-
-		// Photos
+		
+		// Make a request for donation
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons
 				.getResourceId(2, -1)));
-		// Communities, Will add a counter here
-		/*navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons
+		// view all MY donation requests
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons
 				.getResourceId(3, -1), false, "22"));
 		
+		//view all MY donation offers
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons
+				.getResourceId(4, -1), false, "23"));
+		
+		//view all donation-offers
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons
+				.getResourceId(5, -1), false, "24"));
+		
+		//view all donation-requests
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons
+				.getResourceId(6, -1), false, "25"));
+		
+		/*
 		 * // Pages navDrawerItems.add(new
 		 * 
 		 * NavDrawerItem(navMenuTitles[4], navMenuIcons .getResourceId(4, -1)));
@@ -173,21 +191,42 @@ public class MainActivity extends Activity {
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			Log.d("check", "skdfgjdlg " + position);
+			Log.d("check", "Home - Clicked " + position);
 			fragment = new HomeFragment();
 			break;
 		case 1:
-			Log.d("check", "skdfgjdlg1" + position);
+			Log.d("check", "FragmentDonate - Clicked" + position);
 			fragment = new FragmentDonate();
 			break;
 		case 2:
-			Log.d("check", "skdfgjdlg1" + position);
-			startActivity(new Intent(getApplicationContext(), ViewRequestActivity.class));
-			//fragment = new FragmentRequest();
+			Log.d("check", "FragmentRequest - Clicked" + position);
+			fragment = new FragmentRequest();
 			break;
-		
+		case 3:
+			Log.d("check", " My Donations Requests - Clicked " + position);
+			DonateFragment viewRequestsFragment = new DonateFragment();
+			viewRequestsFragment.setIsViewingMineOnly(true);
+			fragment = viewRequestsFragment;
+			
+			break;
+		case 4:
+			Log.d("check", " My Donations Offers- Clicked " + position);
+			DonateFragment viewOffersFragment = new DonateFragment();
+			viewOffersFragment.setIsViewingMineOnly(true);
+			fragment = viewOffersFragment;
+			
+			break;
+		case 5:
+			Log.d("check", " All Donations Offers - Clicked " + position);
+			fragment = new DonateFragment();
+			break;
+		case 6:
+			Log.d("check", " All Donations Requests - Clicked " + position);
+			fragment = new DonateFragment();
+			break;			
 
 		default:
+			Log.d("check", " Invalid Option... " + position);
 			break;
 		}
 

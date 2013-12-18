@@ -3,7 +3,12 @@ package org.rhok.pta.sifiso.donatemystuff;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 public class MakeRequestActivity extends Activity {
 
 	@Override

@@ -80,8 +80,7 @@ public final class R {
         public static final int uniform=0x7f020016;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0050;
-        public static final int add=0x7f0a004a;
+        public static final int action_settings=0x7f0a0051;
         public static final int areaname=0x7f0a0036;
         public static final int blanketSubmit=0x7f0a0004;
         public static final int bookAge=0x7f0a0009;
@@ -99,22 +98,22 @@ public final class R {
         public static final int clothQuantity=0x7f0a0011;
         public static final int clothSize=0x7f0a000f;
         public static final int clothSubmit=0x7f0a0012;
-        public static final int counter=0x7f0a004e;
+        public static final int counter=0x7f0a004c;
         public static final int create_account=0x7f0a001d;
         public static final int description=0x7f0a0021;
         public static final int donated_date=0x7f0a0015;
         public static final int donor_id=0x7f0a0013;
         public static final int donor_quantity=0x7f0a0018;
         public static final int drawer_layout=0x7f0a001e;
-        public static final int edtUser=0x7f0a004b;
         public static final int email=0x7f0a002c;
         public static final int frame_container=0x7f0a001f;
         public static final int gridview=0x7f0a0049;
-        public static final int icon=0x7f0a004c;
+        public static final int icon=0x7f0a004a;
         public static final int imageView1=0x7f0a0001;
         public static final int item=0x7f0a0046;
         public static final int item_code=0x7f0a0017;
         public static final int item_name=0x7f0a0016;
+        public static final int layout_root=0x7f0a004e;
         public static final int listRequest=0x7f0a0044;
         public static final int list_slidermenu=0x7f0a0020;
         public static final int log_password=0x7f0a001b;
@@ -149,8 +148,9 @@ public final class R {
         public static final int textView3=0x7f0a0008;
         public static final int textView4=0x7f0a000b;
         public static final int textView6=0x7f0a0014;
-        public static final int title=0x7f0a004d;
-        public static final int txtLabel=0x7f0a004f;
+        public static final int title=0x7f0a004b;
+        public static final int tvPromptLabel=0x7f0a004f;
+        public static final int txtLabel=0x7f0a004d;
         public static final int type=0x7f0a0024;
         public static final int uniformGender=0x7f0a0041;
         public static final int uniformPants=0x7f0a0022;
@@ -160,6 +160,7 @@ public final class R {
         public static final int uniformSubmit=0x7f0a0026;
         public static final int unitname=0x7f0a0034;
         public static final int unitnumber=0x7f0a0033;
+        public static final int userInput=0x7f0a0050;
         public static final int username=0x7f0a002d;
     }
     public static final class layout {
@@ -182,6 +183,7 @@ public final class R {
         public static final int drawer_list_item=0x7f030010;
         public static final int fragment_home=0x7f030011;
         public static final int fragment_request=0x7f030012;
+        public static final int items_prompt_layout=0x7f030013;
     }
     public static final class menu {
         public static final int blanket_donation=0x7f090000;
@@ -210,6 +212,8 @@ public final class R {
         public static final int drawer_open=0x7f060003;
         public static final int hello_world=0x7f060002;
         public static final int hinter=0x7f060005;
+        public static final int prompt_label_offer=0x7f060016;
+        public static final int prompt_label_request=0x7f060015;
         public static final int title_activity_blanket_donation=0x7f06000d;
         /**  <string name="title_activity_donate_fragment">DonateFragment</string> 
          */

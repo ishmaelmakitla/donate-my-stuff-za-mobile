@@ -1,7 +1,12 @@
 package org.rhok.pta.sifiso.donatemystuff;
 
 
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 import org.rhok.pta.sifiso.donatemystuff.adapter.DonateAdapter;
 
 import android.app.Fragment;

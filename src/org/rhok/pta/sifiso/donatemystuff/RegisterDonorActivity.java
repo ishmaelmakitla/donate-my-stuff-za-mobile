@@ -27,7 +27,12 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 public class RegisterDonorActivity extends Activity {
 	private static final String TAG = RegisterDonorActivity.class
 			.getSimpleName();

@@ -24,7 +24,12 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
-
+/**
+ * 
+ * 
+ * @author sifiso mtshweni
+ * 
+ */
 public class UniformsDonationActivity extends Activity {
 
 	private static final String TAG = UniformsDonationActivity.class

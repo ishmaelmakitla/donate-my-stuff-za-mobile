@@ -1,16 +1,7 @@
 package org.rhok.pta.sifiso.donatemystuff.adapter;
 
-import java.util.List;
-
-import org.rhok.pta.sifiso.donatemystuff.BlanketDonationActivity;
-import org.rhok.pta.sifiso.donatemystuff.BookDonateActivity;
-import org.rhok.pta.sifiso.donatemystuff.ClothDonationActivity;
 import org.rhok.pta.sifiso.donatemystuff.R;
-import org.rhok.pta.sifiso.donatemystuff.ShoesDonationActivity;
 import org.rhok.pta.sifiso.donatemystuff.ViewDonationActivity;
-import org.rhok.pta.sifiso.donatemystuff.adapter.DonateAdapter.DonationType;
-import org.rhok.pta.sifiso.donatemystuff.model.DonationOffer;
-import org.rhok.pta.sifiso.donatemystuff.model.DonationRequest;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 import org.rhok.pta.sifiso.donatemystuff.util.FontChanger;
 
@@ -21,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,25 +20,39 @@ import com.squareup.picasso.Picasso;
 /**
  * 
  * 
- * @author Sifiso Mtshweni & Ishmael Makitla
+ * @author sifiso mtshweni
  * 
  */
-public class RequestAdapter extends BaseAdapter {
+public class DonationRequestAdapter extends BaseAdapter {
+	
+	private static final String TAG = DonationRequestAdapter.class.getSimpleName();
 	public enum DonationType {
-		SHOES, CLOTHES, BOOKS, BLANKETS;		
-		public static DonationType toType(String type){
-			return valueOf(type.toUpperCase());
-		}
+		SHOES, CLOTHES, BOOKS, BLANKETS
 	};
 
 	private Context context;
 	private String[] items;
-	private static final int[] mThumbIds = { R.drawable.books,R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
+	private static final int[] mThumbIds = { R.drawable.books,
+			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
 	
-	public RequestAdapter(Context _context) {
-		this.context = _context;
-		items = context.getResources().getStringArray(R.array.donatio_items);
+	private boolean isViewingMineOnly = false;
 
+	public DonationRequestAdapter(Context context) {
+		initialize(context, false);	
+	}
+	
+	public DonationRequestAdapter(Context context, boolean viewMineONLY) {
+		initialize(context, viewMineONLY);	
+	}
+	/**
+	 * This method simply initialized the Class properties
+	 * @param context
+	 * @param viewMineONLY
+	 */
+	private void initialize(Context context, boolean viewMineONLY){
+		this.context = context;
+		this.isViewingMineOnly = viewMineONLY;	
+		items = context.getResources().getStringArray(R.array.donatio_items);
 	}
 
 	@Override
@@ -58,25 +62,25 @@ public class RequestAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int arg0) {
+	public Object getItem(int position) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public long getItemId(int arg0) {
+	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup root) {
-
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
 		ViewHolder holder = new ViewHolder();
 		if (convertView == null) {
 			LayoutInflater infalter = (LayoutInflater) context
 					.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-			convertView = infalter.inflate(R.layout.cards, root, false);
+			convertView = infalter.inflate(R.layout.cards, parent, false);
 			holder.img = (ImageView) convertView
 					.findViewById(R.id.recarga_thumb);
 			holder.click = (View) convertView.findViewById(R.id.clickView2);
@@ -94,9 +98,8 @@ public class RequestAdapter extends BaseAdapter {
 		holder.type = type;
 		convertView.setTag(holder);
 
-		Log.d(RequestAdapter.class.getSimpleName(), "Item At Position "
+		Log.d(TAG, "Item At Position "
 				+ position + " is " + type);
-
 		return convertView;
 	}
 
@@ -135,52 +138,56 @@ public class RequestAdapter extends BaseAdapter {
 		public CustomClickListener(String args, int viewPosition) {
 			this.args = args;
 			this.position = viewPosition;
-			Log.d(DonateAdapter.class.getSimpleName(),
+			Log.d(DonationRequestAdapter.class.getSimpleName(),
 					" CustomClickListener:: " + args + " position::" + position);
 		}
 
 		@Override
 		public void onClick(View view) {
-			Intent donationRequestIntent = null;
+			Intent intent = null;
 			Bundle b = new Bundle();
-			//indicate the list to be retrieved is a list of Donation-Requests, for the category of item selected below
-			b.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_REQUESTS_LIST);
+			//indicate whether the list of requests/offers to be shown for each category are the ones submitted by current user
+			b.putBoolean(DonateMyStuffGlobals.FLAG_VIEW_MINE_ONLY, isViewingMineOnly);
 			
 			DonationType type = deriveDonationType(position);
+			
+			b.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_REQUESTS_LIST);
 
-			Log.d(RequestAdapter.class.getSimpleName()," Clicked-Donation-Type:: " + type);
+			Log.d(DonationRequestAdapter.class.getSimpleName(),
+					" Clicked-Donation-Type:: " + type);
 			switch (type) {
 			case BOOKS:
-				b.putString("type", "book");
-				donationRequestIntent = new Intent(context, BookDonateActivity.class)
+				b.putString("type", "books");
+				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
 
-				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 				break;
 
 			case CLOTHES:
 				b.putString("type", "clothes");
-				donationRequestIntent = new Intent(context, ClothDonationActivity.class)
+				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
-				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
 			case SHOES:
 				b.putString("type", "shoes");
-				donationRequestIntent = new Intent(context, ShoesDonationActivity.class)
+				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
-				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
 			case BLANKETS:
 				b.putString("type", "blankets");
-				donationRequestIntent = new Intent(context, BlanketDonationActivity.class)
+				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
-				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
+
 			}
 
-			if (donationRequestIntent != null) {
-				context.startActivity(donationRequestIntent);
+			if (intent != null) {
+				context.startActivity(intent);
 			}
 
 		}

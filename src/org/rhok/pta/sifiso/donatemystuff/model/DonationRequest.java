@@ -13,6 +13,7 @@ public class DonationRequest {
     String donationofferid;
     Date requestdate;
     DonatedItem item;
+    int quantity;
     
     public DonationRequest(){
     	this.id = UUID.randomUUID().toString();
@@ -65,12 +66,17 @@ public class DonationRequest {
 		this.requestdate = requestDate;
 	}
 
-
-
 	public DonatedItem getRequestedDonationItem() {
 		return item;
 	}
+	
+	public int getQuantity() {
+		return quantity;
+	}
 
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
 
 	public void setRequestedDonationItem(DonatedItem requestedDonationItem) {
@@ -89,6 +95,7 @@ public class DonationRequest {
 		json.addProperty("requestdate", requestdate.toString());
 		json.addProperty("beneficiaryid", beneficiaryid);
 		json.addProperty("donationofferid", donationofferid);
+		json.addProperty("quantity", quantity);
 		//donated item
 		JsonObject donatedItemJson = null;
 		if(item != null){
