@@ -2,6 +2,7 @@ package org.rhok.pta.sifiso.donatemystuff;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import com.android.volley.Request;
@@ -47,6 +48,9 @@ public class ShoesDonationActivity extends Activity {
 	
 	//the Server URL based on the mode (Request/Offer)
 	private String serverURL = null;
+	
+	//session
+	private UserSession session;
 	//mode
 	int mode = -1;
 
@@ -89,6 +93,10 @@ public class ShoesDonationActivity extends Activity {
 					Log.i(TAG, "Current Mode at ClothDonation is "+mode);
 					serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST? 
 							         DonateMyStuffGlobals.MAKE_DONATION_OFFER_SERVLET_URL: DonateMyStuffGlobals.MAKE_DONATION_REQUEST_SERVLET_URL);
+					
+					session = (UserSession)extras.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+					String title = getTitle().toString()+session.getUsername();
+					setTitle(title);
 					
 					//if the mode is Requests, disable the Quantity field
 					if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
@@ -152,16 +160,17 @@ public class ShoesDonationActivity extends Activity {
 
 	private JSONObject createOfferJSON() throws JSONException {
 		JSONObject json = new JSONObject();
+		String me = session.getUserID();
 		//these are depending on the mode of operation...
 		if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
-				json.put("beneficiaryid", "1234567890"); //this must be replaced with the ID of the logged in user
+				json.put("beneficiaryid", me); 
 				//this is not a bid...
 				json.put("donationofferid", null);
 				//by default donations are delivered
 				json.put("collect", false);
 			}
 	   else{
-				json.put("donorid", "1234567890"); //this must be replaced with the ID of the logged in user
+				json.put("donorid", me);
 				json.put("donationrequestid", null);
 				json.put("deliver", true);
 		 }

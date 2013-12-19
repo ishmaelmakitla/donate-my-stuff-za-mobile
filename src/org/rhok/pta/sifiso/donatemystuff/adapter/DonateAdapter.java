@@ -5,6 +5,7 @@ import org.rhok.pta.sifiso.donatemystuff.BookDonateActivity;
 import org.rhok.pta.sifiso.donatemystuff.ClothDonationActivity;
 import org.rhok.pta.sifiso.donatemystuff.R;
 import org.rhok.pta.sifiso.donatemystuff.ShoesDonationActivity;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 import org.rhok.pta.sifiso.donatemystuff.util.FontChanger;
 
@@ -34,15 +35,22 @@ public class DonateAdapter extends BaseAdapter {
 
 	private Context context;
 	private String[] items;
+	
 	private static final int[] mThumbIds = { R.drawable.books,
 			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets,
 			};
-
+	
+	
 	public DonateAdapter(Context context) {
 		this.context = context;
 		items = context.getResources().getStringArray(R.array.donatio_items);
 
 	}
+	/**
+	 * Session Handling
+	 */
+	private UserSession session;
+	public void setSession(UserSession _session){ this.session = _session; }
 
 	@Override
 	public int getCount() {
@@ -137,6 +145,8 @@ public class DonateAdapter extends BaseAdapter {
 			Intent intent = null;
 			Bundle bundle = new Bundle();
 			bundle.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_OFFERS_LIST);
+			//set session
+			bundle.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
 			DonationType type = deriveDonationType(position);
 
 			Log.d(DonateAdapter.class.getSimpleName(),

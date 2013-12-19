@@ -1,5 +1,6 @@
 package org.rhok.pta.sifiso.donatemystuff.model;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +8,9 @@ import java.util.UUID;
 
 import com.google.gson.JsonObject;
 
-public class DonationRequest {
+public class DonationRequest implements Serializable{
+	
+	private static final long serialVersionUID = 786065079901106981L;
 	String id;
     String beneficiaryid;
     String donationofferid;

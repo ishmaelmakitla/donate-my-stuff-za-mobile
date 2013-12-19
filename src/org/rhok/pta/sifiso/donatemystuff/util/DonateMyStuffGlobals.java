@@ -19,9 +19,13 @@ public class DonateMyStuffGlobals {
 	//The URL to Donate-My-Stuff Service - for making donation requests
 	public static final String MAKE_DONATION_REQUEST_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/makedonationrequest";
 	
-	public static final String GET_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/donationrequests";
+	public static final String GET_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/donationoffers"; 
 	//The URL to Donate-My-Stuff Service - for making donation requests
-	public static final String GET_DONATION_REQUEST_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/donationoffers";
+	public static final String GET_DONATION_REQUEST_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/donationrequests";
+			
+	
+	//URL for login
+	public static final String LOGIN_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/login";
 	
 	
 	public static final int MODE_REQUESTS_LIST = 0;
@@ -29,6 +33,7 @@ public class DonateMyStuffGlobals {
 	
 	//Literals for Bundle Keys
 	public static final String KEY_MODE = "mode";
+	public static final String KEY_SESSION = "session";
 	
 	public static String FLAG_VIEW_MINE_ONLY = "personal";
 }

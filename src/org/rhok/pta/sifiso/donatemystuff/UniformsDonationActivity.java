@@ -2,6 +2,8 @@ package org.rhok.pta.sifiso.donatemystuff;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
+import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,6 +50,14 @@ public class UniformsDonationActivity extends Activity {
 	private Button uniformSubmit;
 	private int gender, shirt, pants;
 	private boolean check;
+	
+	private UserSession session;
+	
+	//the Server URL based on the mode (Request/Offer)
+	private String serverURL = null;
+	
+	//mode
+	int mode = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +69,7 @@ public class UniformsDonationActivity extends Activity {
 		uniformPants = (Spinner) findViewById(R.id.uniformPants);
 		uniformGender = (Spinner) findViewById(R.id.uniformGender);
 		chkUniformBlazer = (CheckBox) findViewById(R.id.chkUniformBlazer);
-		chkUniformBlazer
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		chkUniformBlazer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
@@ -75,6 +84,27 @@ public class UniformsDonationActivity extends Activity {
 				});
 		uniformSubmit = (Button) findViewById(R.id.uniformSubmit);
 		uniformSubmit.setOnClickListener(uniformSubmitListner);
+		
+		Bundle extras = getIntent().getExtras();
+		if(extras !=null){
+			//get the mode
+			mode = extras.getInt(DonateMyStuffGlobals.KEY_MODE);
+			
+			serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST? 
+					         DonateMyStuffGlobals.MAKE_DONATION_OFFER_SERVLET_URL: DonateMyStuffGlobals.MAKE_DONATION_REQUEST_SERVLET_URL);
+			
+			Log.i(TAG, "Current Mode at UniformsDonationActivity is "+mode+" URL is = "+serverURL);
+			
+			session = (UserSession)extras.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+			String title = getTitle().toString()+session.getUsername();
+			setTitle(title);
+			
+			//if the mode is Requests, disable the Quantity field
+			if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
+				uniformQuantity.setText("-1");
+				uniformQuantity.setEnabled(false);
+			}
+		}
 
 		// shirt array
 		ArrayAdapter<String> shirtAdapter = new ArrayAdapter<String>(this,
@@ -183,9 +213,20 @@ public class UniformsDonationActivity extends Activity {
 
 	private JSONObject createOfferJSON() throws JSONException {
 		JSONObject json = new JSONObject();
-		json.put("donor_id", "1234567890");
-		json.put("donation_request_id", null);
-		json.put("deliver", true);
+		String me = session.getUserID();
+		//these are depending on the mode of operation...
+		if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
+				json.put("beneficiaryid", me);
+				//this is not a bid...
+				json.put("donationofferid", null);
+				//by default donations are delivered
+				json.put("collect", false);
+			}
+		else{
+				json.put("donorid", me);
+				json.put("donationrequestid", null);
+				json.put("deliver", true);
+		}
 
 		// donated item
 		JSONObject jsonDonated = new JSONObject();

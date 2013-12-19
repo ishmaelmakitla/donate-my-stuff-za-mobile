@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.json.JSONException;
+import org.rhok.pta.sifiso.donatemystuff.adapter.DonationRequestListAdapter;
 import org.rhok.pta.sifiso.donatemystuff.adapter.OfferAdapter;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationOffer;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationRequest;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.app.Activity;
@@ -47,6 +49,8 @@ public class ViewDonationActivity extends Activity {
 	private String tempCurrentUser = "1234567890";
 	
 	private int mode = -1;
+	
+	private UserSession session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,9 @@ public class ViewDonationActivity extends Activity {
 		mode = b.getInt(DonateMyStuffGlobals.KEY_MODE);
 		String serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST? 
 									DonateMyStuffGlobals.GET_DONATION_OFFER_SERVLET_URL: DonateMyStuffGlobals.GET_DONATION_REQUEST_SERVLET_URL);
-		
+		this.session = (UserSession)b.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+		String title = getTitle().toString();
+		setTitle(title+ " "+session.getUsername());
 		//append the type parameter
 		serverURL = serverURL + "?type="+type;
 		
@@ -88,7 +94,12 @@ public class ViewDonationActivity extends Activity {
 					public void onResponse(String response) {
 						Log.d(TAG, "VolleyResponse::" + response.toString());
 						try {
+							if(mode == DonateMyStuffGlobals.MODE_OFFERS_LIST){
 							processDonationOffers(response);
+							}
+							else{
+								processDonationRequests(response);
+							}
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
@@ -160,7 +171,7 @@ public class ViewDonationActivity extends Activity {
 
 		if (jel != null) {
 
-			jo = jel.getAsJsonObject().get("request").getAsJsonArray();
+			jo = jel.getAsJsonObject().get("requests").getAsJsonArray();
 			if (jo != null) {
 				Log.d(TAG, "Parsed JSON successfully");
 
@@ -175,6 +186,7 @@ public class ViewDonationActivity extends Activity {
 						donationRequestsList.add(donationRequest);
 					}
 					//set them on a list adapter for requests
+					createDonationRequestsListAdapter(donationRequestsList);
 				}
 
 				return;
@@ -184,13 +196,24 @@ public class ViewDonationActivity extends Activity {
 			Log.e(TAG, "Could Not Parse As JSON-Array? Jo = NULL:: \n" + donationRequestsJSONString);
 		}
 	}
+	/**
+	 * List adapter for Donation-Requests
+	 * @param requestsList
+	 */
+	private void createDonationRequestsListAdapter(List<DonationRequest> requestsList){
+		DonationRequestListAdapter requestsListAdapter = new DonationRequestListAdapter(getApplicationContext(),	R.layout.customize_offer_list, requestsList, session);
+		listRequest.setAdapter(requestsListAdapter);
+	}
 	
+	/**
+	 * List-Adapter for Donation-Offers
+	 * @param list
+	 */
 	private void listAdapter(List<DonationOffer> list) {
 		if (list == null) {
 			list = new ArrayList<DonationOffer>();
 		}
-		adapter = new OfferAdapter(getApplicationContext(),
-				R.layout.customize_offer_list, list);
+		adapter = new OfferAdapter(getApplicationContext(),	R.layout.customize_offer_list, list, session);
 		listRequest.setAdapter(adapter);
 	}
 

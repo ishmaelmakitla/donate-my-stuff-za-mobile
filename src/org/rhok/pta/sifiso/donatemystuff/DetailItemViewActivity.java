@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationOffer;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationRequest;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import com.android.volley.Request;
@@ -63,7 +64,8 @@ public class DetailItemViewActivity extends Activity {
 	int itemCount = 0;
 	//the current mode of this UI
 	int mode = INVALID;
-	
+	//user session object
+	UserSession session;
 	
 	final Context context = this;
 
@@ -85,31 +87,60 @@ public class DetailItemViewActivity extends Activity {
 		
 		requestSubmit = (Button) findViewById(R.id.requestSubmit);
 		requestSubmit.setOnClickListener(onSubmitRequestClick);
-
-		donor_id.setText(b.getString("id"));
-		donated_date.setText(new Date(b.getLong("offerdate")).toString());
-		item_name.setText(b.getString("name"));
-		if (b.getInt("gendercode") == 0) {
-			item_code.setText("Male");
-		} else {
-			item_code.setText( "Female");
-		}
-
-		donor_quantity.setText(b.getInt("quantity") + "");
 		
+		//get the session object
+		session = (UserSession)b.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+		//set title - must do this for all UIs to be consistent
+		String title = getTitle().toString() +" "+session.getUsername();
+		setTitle(title);
+				
 		if(b.containsKey(KEY_OFFER)){			
 			//get the offer
 			offer = (DonationOffer) b.getSerializable(KEY_OFFER);			
 			if(offer != null){mode = OFFER;}
+			//load the offer
+			loadDonationOffer(offer);
 		}
 		else if(b.containsKey(KEY_REQUEST)){
 			request = (DonationRequest)b.getSerializable(KEY_REQUEST);
-			if(request != null){ mode = REQUEST; }			
+			if(request != null){ mode = REQUEST; }		
+			//load the request
+			loadDonationRequest(request);
 		}
 		
-		
-		
 	}
+	
+	/**
+	 * Method used to populate the properties of an offer onto the UI
+	 * @param offer
+	 */
+	private void loadDonationOffer(DonationOffer offer){
+		donor_id.setText(offer.getId());
+		donated_date.setText(offer.getOfferDate().toString());
+		item_name.setText(offer.getItem().getName());
+		if (offer.getItem().getGenderCode() == 0) {
+			item_code.setText("Male");
+		} else {
+			item_code.setText( "Female");
+		}
+		donor_quantity.setText(offer.getQuantity() + "");
+	}
+	/**
+	 * Method used to populate the properties of an offer onto the UI
+	 * @param offer
+	 */
+	private void loadDonationRequest(DonationRequest request){
+		donor_id.setText(request.getId());
+		donated_date.setText(request.getRequestDate().toString());
+		item_name.setText(request.getRequestedDonationItem().getName());
+		if (request.getRequestedDonationItem().getGenderCode() == 0) {
+			item_code.setText("Male");
+		} else {
+			item_code.setText( "Female");
+		}
+		donor_quantity.setText(request.getQuantity() + "");
+	}
+	
 	
 	/**
 	 * Listener for when the button is clicked - 
@@ -161,7 +192,7 @@ public class DetailItemViewActivity extends Activity {
 			//now set the number of items required
 			donationBid.setQuantity(itemQuantity);
 			//specify that YOU are requesting the donation
-			donationBid.setBeneficriaryId("1234567890");
+			donationBid.setBeneficriaryId(session.getUserID());
 			//specify that this is a response to an offer
 			donationBid.setDonationOfferId(offer.getId());
 						
@@ -259,8 +290,7 @@ public class DetailItemViewActivity extends Activity {
 			//the offered item is the requested item
 			newOffer.setItem(request.getRequestedDonationItem());
 			//user specifies himself as the donor
-			String me = "120034567890";
-			newOffer.setDonorId(me);
+			newOffer.setDonorId(session.getUserID());
 			//set the number of items being offered for donation in response to the request
 			newOffer.setQuantity(itemQuantity);
 									

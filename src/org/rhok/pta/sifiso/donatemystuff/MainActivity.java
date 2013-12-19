@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.rhok.pta.sifiso.donatemystuff.adapter.NavDrawerListAdapter;
 import org.rhok.pta.sifiso.donatemystuff.model.NavDrawerItem;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
+import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -21,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 /**
  * 
  * 
@@ -45,11 +48,26 @@ public class MainActivity extends Activity {
 
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
+	
+	private UserSession session;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//get the session object
+		Bundle extras = getIntent().getExtras();
+		session = (UserSession)extras.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+		if(session == null){
+			Toast.makeText(this, "There was a problem getting your User Information. You Need To login Afg", Toast.LENGTH_LONG).show();
+			//close this Activity so the previous login page shows...
+			finish();
+		}
+		else{
+			//set title
+			setTitle("Donate-My-Stuff: "+session.getUsername());
+		}
 
 		mTitle = mDrawerTitle = getTitle();
 
@@ -92,17 +110,6 @@ public class MainActivity extends Activity {
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons
 				.getResourceId(6, -1), false, "25"));
 		
-		/*
-		 * // Pages navDrawerItems.add(new
-		 * 
-		 * NavDrawerItem(navMenuTitles[4], navMenuIcons .getResourceId(4, -1)));
-		 * // What's hot, We will add a counter here navDrawerItems.add(new
-		 * NavDrawerItem(navMenuTitles[5], navMenuIcons .getResourceId(5, -1),
-		 * true, "50+")); // What's hot, We will add a counter here
-		 * navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons
-		 * .getResourceId(6, -1), true, "50+"));
-		 */
-
 		navMenuIcons.recycle();
 
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
@@ -139,7 +146,6 @@ public class MainActivity extends Activity {
 
 		if (savedInstanceState == null) {
 			// on first time display view for first nav item
-			Log.d("check", "speke");
 			displayView(0);
 		}
 	}
@@ -191,38 +197,51 @@ public class MainActivity extends Activity {
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			Log.d("check", "Home - Clicked " + position);
+			Log.d("check", "Home - Clicked " + session);
 			fragment = new HomeFragment();
 			break;
 		case 1:
-			Log.d("check", "FragmentDonate - Clicked" + position);
-			fragment = new FragmentDonate();
+			Log.d("check", "FragmentDonate - Clicked" + session);
+			FragmentDonate fd = new FragmentDonate();
+			fd.setSession(session);
+			fragment = fd;
 			break;
 		case 2:
-			Log.d("check", "FragmentRequest - Clicked" + position);
-			fragment = new FragmentRequest();
+			Log.d("check", "FragmentRequest - Clicked - Session Object is "+session);
+			FragmentRequest fr = new FragmentRequest();
+			fr.setSession(session);
+			fragment = fr;
 			break;
 		case 3:
-			Log.d("check", " My Donations Requests - Clicked " + position);
+			Log.d("check", " My Donations Requests - Clicked " + session);
 			DonateFragment viewRequestsFragment = new DonateFragment();
 			viewRequestsFragment.setIsViewingMineOnly(true);
+			viewRequestsFragment.setSession(session);
+			viewRequestsFragment.setMode(DonateMyStuffGlobals.MODE_REQUESTS_LIST);
 			fragment = viewRequestsFragment;
 			
 			break;
 		case 4:
-			Log.d("check", " My Donations Offers- Clicked " + position);
+			Log.d("check", " My Donations Offers- Clicked " + session);
 			DonateFragment viewOffersFragment = new DonateFragment();
 			viewOffersFragment.setIsViewingMineOnly(true);
+			viewOffersFragment.setSession(session);
+			viewOffersFragment.setMode(DonateMyStuffGlobals.MODE_OFFERS_LIST);
 			fragment = viewOffersFragment;
 			
 			break;
 		case 5:
-			Log.d("check", " All Donations Offers - Clicked " + position);
-			fragment = new DonateFragment();
+			Log.d("check", " All Donations Offers - Clicked " + session);
+			DonateFragment df = new DonateFragment();
+			df.setMode(DonateMyStuffGlobals.MODE_OFFERS_LIST);
+			df.setSession(session);
+			fragment = df;
 			break;
 		case 6:
-			Log.d("check", " All Donations Requests - Clicked " + position);
-			fragment = new DonateFragment();
+			Log.d("check", " All Donations Requests - Clicked " + session);
+			DonateFragment dfRequests = new DonateFragment();
+			dfRequests.setMode(DonateMyStuffGlobals.MODE_REQUESTS_LIST);
+			fragment = dfRequests;
 			break;			
 
 		default:
@@ -238,7 +257,7 @@ public class MainActivity extends Activity {
 			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);
-			setTitle(navMenuTitles[position]);
+			setTitle(navMenuTitles[position] +" "+ session.getUsername());
 			mDrawerLayout.closeDrawer(mDrawerList);
 		} else {
 			// error in creating fragment

@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import org.rhok.pta.sifiso.donatemystuff.DetailItemViewActivity;
 import org.rhok.pta.sifiso.donatemystuff.R;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationOffer;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
+import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.content.Context;
 import android.content.Intent;
@@ -31,8 +33,9 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 	private LayoutInflater inflater;
 	private Context context;
 	private int mResource;
+	private UserSession session;
 
-	public OfferAdapter(Context context, int resource, List<DonationOffer> offer) {
+	public OfferAdapter(Context context, int resource, List<DonationOffer> offer, UserSession _session) {
 		super(context, resource, offer);
 		this.context = context;
 		mResource = resource;
@@ -40,6 +43,7 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		donationOffers = offer;
+		this.session = _session;
 	}
 
 	@Override
@@ -70,6 +74,7 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 				
 				//new: instead of putting each field in a bundle, put the whole object as a serializable
 				bundle.putSerializable("offer", dOffer);
+				bundle.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
 				
 				bundle.putString("id", dOffer.getId());
 				bundle.putString("donorid", dOffer.getDonorId());

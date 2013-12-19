@@ -8,6 +8,7 @@ package org.rhok.pta.sifiso.donatemystuff;
  * 
  */
 import org.rhok.pta.sifiso.donatemystuff.adapter.DonateAdapter;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -24,9 +25,14 @@ public class FragmentDonate extends Fragment{
 		// TODO Auto-generated method stub
 		View v=inflater.inflate(R.layout.donate, container,false);
 		GridView grid=(GridView)v.findViewById(R.id.gridview);
-		grid.setAdapter(new DonateAdapter(getActivity()));
+		DonateAdapter da = new DonateAdapter(getActivity());
+		da.setSession(session);
+		grid.setAdapter(da);
 		
 		return v;
 	}
+	
+	private UserSession session;
+	public void setSession(UserSession _session){ this.session = _session; }
 
 }

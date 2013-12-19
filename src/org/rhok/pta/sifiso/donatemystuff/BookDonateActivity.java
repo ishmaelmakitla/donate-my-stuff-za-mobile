@@ -2,6 +2,7 @@ package org.rhok.pta.sifiso.donatemystuff;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.app.Activity;
@@ -23,16 +24,12 @@ import com.android.volley.toolbox.Volley;
 /**
  * 
  * 
- * @author sifiso mtshweni
+ * @author Sifiso Mtshweni & Ishmael Makitla
  * 
  */
 public class BookDonateActivity extends Activity {
 	private static final String TAG = BookDonateActivity.class.getSimpleName();
-
-	private static final String MAKE_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/makedonationoffer";
-	// private static final String MAKE_DONATION_OFFER_SERVLET_URL =
-	// "http://za-donate-my-stuff.appspot.com/makedonationrequest?payload=";
-
+	
 	private EditText bookName;
 	private EditText bookSize;
 	private EditText bookAge;
@@ -42,6 +39,8 @@ public class BookDonateActivity extends Activity {
 	
 	//the Server URL based on the mode (Request/Offer)
 	private String serverURL = null;
+	
+	private UserSession session;
 	//mode
 	int mode = -1;
 
@@ -68,6 +67,10 @@ public class BookDonateActivity extends Activity {
 							         DonateMyStuffGlobals.MAKE_DONATION_OFFER_SERVLET_URL: DonateMyStuffGlobals.MAKE_DONATION_REQUEST_SERVLET_URL);
 					
 					Log.i(TAG, "Current Mode at BookDonateActivity is "+mode+" URL is = "+serverURL);
+					
+					session = (UserSession)extras.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+					String title = getTitle().toString();
+					setTitle(title+" "+session.getUsername());
 					
 					//if the mode is Requests, disable the Quantity field
 					if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
@@ -123,7 +126,6 @@ public class BookDonateActivity extends Activity {
 			Toast.makeText(getApplicationContext(), serverMessage, Toast.LENGTH_LONG).show();			
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -136,17 +138,17 @@ public class BookDonateActivity extends Activity {
 	 */
 	private JSONObject createJSONPayload() throws JSONException {
 		JSONObject json = new JSONObject();
-		
+		String me = session.getUserID();
 		//these are depending on the mode of operation...
 		if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
-				json.put("beneficiaryid", "1234567890"); //this must be replaced with the ID of the logged in user
+				json.put("beneficiaryid", me);
 				//this is not a bid...
 				json.put("donationofferid", null);
 				//by default donations are delivered
 				json.put("collect", false);
 			}
 		else{
-				json.put("donorid", "1234567890"); //this must be replaced with the ID of the logged in user
+				json.put("donorid", me);
 				json.put("donationrequestid", null);
 				json.put("deliver", true);
 		}
@@ -186,16 +188,3 @@ public class BookDonateActivity extends Activity {
 
 }
 
-/*
- * ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
- * android.R.layout.simple_spinner_item, getResources()
- * .getStringArray(R.array.gender_data)); dataAdapter
- * .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
- * bookGender.setAdapter(dataAdapter); bookGender .setOnItemSelectedListener(new
- * AdapterView.OnItemSelectedListener() {
- * 
- * @Override public void onItemSelected(AdapterView<?> arg0, View arg1, int
- * arg2, long arg3) { gender = arg2; }
- * 
- * @Override public void onNothingSelected(AdapterView<?> arg0) { } });
- */

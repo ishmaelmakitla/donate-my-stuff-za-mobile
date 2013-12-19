@@ -11,6 +11,7 @@ import org.rhok.pta.sifiso.donatemystuff.ViewDonationActivity;
 import org.rhok.pta.sifiso.donatemystuff.adapter.DonateAdapter.DonationType;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationOffer;
 import org.rhok.pta.sifiso.donatemystuff.model.DonationRequest;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 import org.rhok.pta.sifiso.donatemystuff.util.FontChanger;
 
@@ -43,12 +44,14 @@ public class RequestAdapter extends BaseAdapter {
 
 	private Context context;
 	private String[] items;
+	private UserSession session;
+	
 	private static final int[] mThumbIds = { R.drawable.books,R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
 	
-	public RequestAdapter(Context _context) {
+	public RequestAdapter(Context _context, UserSession userSession) {
 		this.context = _context;
 		items = context.getResources().getStringArray(R.array.donatio_items);
-
+		this.session = userSession;
 	}
 
 	@Override
@@ -145,6 +148,7 @@ public class RequestAdapter extends BaseAdapter {
 			Bundle b = new Bundle();
 			//indicate the list to be retrieved is a list of Donation-Requests, for the category of item selected below
 			b.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_REQUESTS_LIST);
+			b.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
 			
 			DonationType type = deriveDonationType(position);
 

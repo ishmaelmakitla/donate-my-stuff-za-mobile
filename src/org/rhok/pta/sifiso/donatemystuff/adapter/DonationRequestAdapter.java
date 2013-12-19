@@ -2,6 +2,7 @@ package org.rhok.pta.sifiso.donatemystuff.adapter;
 
 import org.rhok.pta.sifiso.donatemystuff.R;
 import org.rhok.pta.sifiso.donatemystuff.ViewDonationActivity;
+import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 import org.rhok.pta.sifiso.donatemystuff.util.FontChanger;
 
@@ -36,23 +37,28 @@ public class DonationRequestAdapter extends BaseAdapter {
 			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
 	
 	private boolean isViewingMineOnly = false;
+	private int mode = DonateMyStuffGlobals.MODE_REQUESTS_LIST;
 
 	public DonationRequestAdapter(Context context) {
-		initialize(context, false);	
+		initialize(context, false, -1, null);	
 	}
 	
-	public DonationRequestAdapter(Context context, boolean viewMineONLY) {
-		initialize(context, viewMineONLY);	
+	public DonationRequestAdapter(Context context, boolean viewMineONLY, int _mode, UserSession _session) {
+		initialize(context, viewMineONLY, _mode, _session);	
 	}
+	private UserSession session;
+	
 	/**
 	 * This method simply initialized the Class properties
 	 * @param context
 	 * @param viewMineONLY
 	 */
-	private void initialize(Context context, boolean viewMineONLY){
+	private void initialize(Context context, boolean viewMineONLY, int _mode, UserSession _session){
 		this.context = context;
 		this.isViewingMineOnly = viewMineONLY;	
 		items = context.getResources().getStringArray(R.array.donatio_items);
+		this.mode = (_mode== -1? DonateMyStuffGlobals.MODE_REQUESTS_LIST:_mode);
+		this.session = _session;
 	}
 
 	@Override
@@ -151,8 +157,9 @@ public class DonationRequestAdapter extends BaseAdapter {
 			
 			DonationType type = deriveDonationType(position);
 			
-			b.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_REQUESTS_LIST);
-
+			b.putInt(DonateMyStuffGlobals.KEY_MODE, mode);
+			b.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
+			
 			Log.d(DonationRequestAdapter.class.getSimpleName(),
 					" Clicked-Donation-Type:: " + type);
 			switch (type) {
