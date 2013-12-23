@@ -190,7 +190,7 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Diplaying fragment view for selected nav drawer list item
+	 * Displaying fragment view for selected nav drawer list item
 	 * */
 	private void displayView(int position) {
 		// update the main content by replacing fragments
@@ -198,7 +198,9 @@ public class MainActivity extends Activity {
 		switch (position) {
 		case 0:
 			Log.d("check", "Home - Clicked " + session);
-			fragment = new HomeFragment();
+			HomeFragment hf = new HomeFragment();
+			hf.setSession(session);
+			fragment = hf;
 			break;
 		case 1:
 			Log.d("check", "FragmentDonate - Clicked" + session);
@@ -241,6 +243,7 @@ public class MainActivity extends Activity {
 			Log.d("check", " All Donations Requests - Clicked " + session);
 			DonateFragment dfRequests = new DonateFragment();
 			dfRequests.setMode(DonateMyStuffGlobals.MODE_REQUESTS_LIST);
+			dfRequests.setSession(session);
 			fragment = dfRequests;
 			break;			
 

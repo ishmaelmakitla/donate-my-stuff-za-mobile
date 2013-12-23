@@ -34,7 +34,7 @@ import com.google.gson.JsonParser;
 /**
  * 
  * 
- * @author sifiso mtshweni
+ * @author Sifiso Mtshweni & Ishmael Makitla
  * 
  */
 public class ViewDonationActivity extends Activity {
@@ -45,9 +45,7 @@ public class ViewDonationActivity extends Activity {
 	private ListView listRequest;
 	private OfferAdapter adapter;
 	private String type;
-	
-	private String tempCurrentUser = "1234567890";
-	
+		
 	private int mode = -1;
 	
 	private UserSession session;
@@ -75,11 +73,11 @@ public class ViewDonationActivity extends Activity {
 		//check if the items to be shown are those submitted by the user
 		boolean showingMineOnly = b.getBoolean(DonateMyStuffGlobals.FLAG_VIEW_MINE_ONLY);
 		if(showingMineOnly){
-			Log.d(TAG, "Only Showing Items Submitted By This USER ("+tempCurrentUser+")");
+			Log.d(TAG, "Only Showing Items Submitted By This USER ("+session.getUserID()+")");
 			//server URL must include user-id = 
-			if(mode == DonateMyStuffGlobals.MODE_OFFERS_LIST){ serverURL +="&donorid="+tempCurrentUser;}
+			if(mode == DonateMyStuffGlobals.MODE_OFFERS_LIST){ serverURL +="&donorid="+session.getUserID();}
 			else{
-				serverURL +="&beneficiary="+tempCurrentUser;
+				serverURL +="&beneficiary="+session.getUserID();
 			}
 		}
 		
