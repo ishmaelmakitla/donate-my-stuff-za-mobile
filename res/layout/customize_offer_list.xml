@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/quantity"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/description"
@@ -33,5 +33,15 @@
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/grey" />
+
+    <TextView
+        android:id="@+id/deliver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/quantity"
+        android:layout_alignBottom="@+id/quantity"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="14dp"
+        android:text="TextView" />
 
 </RelativeLayout>

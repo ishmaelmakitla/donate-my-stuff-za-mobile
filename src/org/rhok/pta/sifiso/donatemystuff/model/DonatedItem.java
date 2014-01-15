@@ -3,6 +3,7 @@ package org.rhok.pta.sifiso.donatemystuff.model;
 import java.io.Serializable;
 import java.util.UUID;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class DonatedItem implements Serializable {

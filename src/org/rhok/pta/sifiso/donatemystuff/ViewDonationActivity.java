@@ -39,15 +39,16 @@ import com.google.gson.JsonParser;
  */
 public class ViewDonationActivity extends Activity {
 
-	private static final String TAG = ViewDonationActivity.class.getSimpleName();
+	private static final String TAG = ViewDonationActivity.class
+			.getSimpleName();
 
 	private static final String GET_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/donationoffers?type=";
 	private ListView listRequest;
 	private OfferAdapter adapter;
 	private String type;
-		
+
 	private int mode = -1;
-	
+
 	private UserSession session;
 
 	@Override
@@ -60,27 +61,32 @@ public class ViewDonationActivity extends Activity {
 	private void setFields() {
 		Bundle b = getIntent().getExtras();
 		type = b.getString("type");
-		//now the Server URL depends on whether the mode is OFFERS or REQUESTS
+		// now the Server URL depends on whether the mode is OFFERS or REQUESTS
 		mode = b.getInt(DonateMyStuffGlobals.KEY_MODE);
-		String serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST? 
-									DonateMyStuffGlobals.GET_DONATION_OFFER_SERVLET_URL: DonateMyStuffGlobals.GET_DONATION_REQUEST_SERVLET_URL);
-		this.session = (UserSession)b.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+		String serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST ? DonateMyStuffGlobals.GET_DONATION_OFFER_SERVLET_URL
+				: DonateMyStuffGlobals.GET_DONATION_REQUEST_SERVLET_URL);
+		this.session = (UserSession) b
+				.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
 		String title = getTitle().toString();
-		setTitle(title+ " "+session.getUsername());
-		//append the type parameter
-		serverURL = serverURL + "?type="+type;
-		
-		//check if the items to be shown are those submitted by the user
-		boolean showingMineOnly = b.getBoolean(DonateMyStuffGlobals.FLAG_VIEW_MINE_ONLY);
-		if(showingMineOnly){
-			Log.d(TAG, "Only Showing Items Submitted By This USER ("+session.getUserID()+")");
-			//server URL must include user-id = 
-			if(mode == DonateMyStuffGlobals.MODE_OFFERS_LIST){ serverURL +="&donorid="+session.getUserID();}
-			else{
-				serverURL +="&beneficiary="+session.getUserID();
+		setTitle(title + " " + session.getUsername());
+		// append the type parameter
+		serverURL = serverURL + "?type=" + type;
+
+		// check if the items to be shown are those submitted by the user
+		boolean showingMineOnly = b
+				.getBoolean(DonateMyStuffGlobals.FLAG_VIEW_MINE_ONLY);
+		if (showingMineOnly) {
+			Log.d(TAG,
+					"Only Showing Items Submitted By This USER ("
+							+ session.getUserID() + ")");
+			// server URL must include user-id =
+			if (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST) {
+				serverURL += "&donorid=" + session.getUserID();
+			} else {
+				serverURL += "&beneficiary=" + session.getUserID();
 			}
 		}
-		
+
 		Log.d(TAG, type);
 		listRequest = (ListView) findViewById(R.id.listRequest);
 		
@@ -92,10 +98,9 @@ public class ViewDonationActivity extends Activity {
 					public void onResponse(String response) {
 						Log.d(TAG, "VolleyResponse::" + response.toString());
 						try {
-							if(mode == DonateMyStuffGlobals.MODE_OFFERS_LIST){
-							processDonationOffers(response);
-							}
-							else{
+							if (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST) {
+								processDonationOffers(response);
+							} else {
 								processDonationRequests(response);
 							}
 						} catch (JSONException e) {
@@ -139,7 +144,8 @@ public class ViewDonationActivity extends Activity {
 						JsonObject offerItem = (JsonObject) jo.get(x);
 						String strOff = offerItem.toString();
 						Log.d(TAG, strOff);
-						DonationOffer donationOffer = gson.fromJson(offerItem,DonationOffer.class);
+						DonationOffer donationOffer = gson.fromJson(offerItem,
+								DonationOffer.class);
 						donationOfferList.add(donationOffer);
 					}
 					listAdapter(donationOfferList);
@@ -148,18 +154,20 @@ public class ViewDonationActivity extends Activity {
 				return;
 			}
 
-		}
-		else{
+		} else {
 			Log.e(TAG, "Could Not Parse As JSON-Array? Jo = NULL:: \n" + offers);
-		}		
+		}
 
 	}
+
 	/**
-	 * Method used to process the JSON string of Donation-Requests received from Server
+	 * Method used to process the JSON string of Donation-Requests received from
+	 * Server
 	 * 
-	 * @param donationRequestsJSONString  -JSON of donation requests
+	 * @param donationRequestsJSONString
+	 *            -JSON of donation requests
 	 */
-	private void processDonationRequests(String donationRequestsJSONString){
+	private void processDonationRequests(String donationRequestsJSONString) {
 		Gson gson = new Gson();
 
 		JsonParser parser = new JsonParser();
@@ -180,38 +188,47 @@ public class ViewDonationActivity extends Activity {
 						JsonObject requestItem = (JsonObject) jo.get(x);
 						String strOff = requestItem.toString();
 						Log.d(TAG, strOff);
-						DonationRequest donationRequest = gson.fromJson(requestItem,DonationRequest.class);
+						DonationRequest donationRequest = gson.fromJson(
+								requestItem, DonationRequest.class);
 						donationRequestsList.add(donationRequest);
 					}
-					//set them on a list adapter for requests
+					// set them on a list adapter for requests
 					createDonationRequestsListAdapter(donationRequestsList);
 				}
 
 				return;
 			}
-		}
-		else{
-			Log.e(TAG, "Could Not Parse As JSON-Array? Jo = NULL:: \n" + donationRequestsJSONString);
+		} else {
+			Log.e(TAG, "Could Not Parse As JSON-Array? Jo = NULL:: \n"
+					+ donationRequestsJSONString);
 		}
 	}
+
 	/**
 	 * List adapter for Donation-Requests
+	 * 
 	 * @param requestsList
 	 */
-	private void createDonationRequestsListAdapter(List<DonationRequest> requestsList){
-		DonationRequestListAdapter requestsListAdapter = new DonationRequestListAdapter(getApplicationContext(),	R.layout.customize_offer_list, requestsList, session);
+	private void createDonationRequestsListAdapter(
+			List<DonationRequest> requestsList) {
+		DonationRequestListAdapter requestsListAdapter = new DonationRequestListAdapter(
+				getApplicationContext(), R.layout.customize_request_list,
+				requestsList, session);
 		listRequest.setAdapter(requestsListAdapter);
 	}
-	
+
 	/**
 	 * List-Adapter for Donation-Offers
+	 * 
 	 * @param list
 	 */
 	private void listAdapter(List<DonationOffer> list) {
 		if (list == null) {
 			list = new ArrayList<DonationOffer>();
 		}
-		adapter = new OfferAdapter(getApplicationContext(),	R.layout.customize_offer_list, list, session);
+
+		adapter = new OfferAdapter(getApplicationContext(),
+				R.layout.customize_offer_list, list, session);
 		listRequest.setAdapter(adapter);
 	}
 

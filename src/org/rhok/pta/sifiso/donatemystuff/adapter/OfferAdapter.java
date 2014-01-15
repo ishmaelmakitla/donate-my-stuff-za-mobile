@@ -11,6 +11,7 @@ import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint.Join;
 import android.os.Bundle;
 import android.sax.StartElementListener;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 /**
  * 
  * 
@@ -33,9 +35,11 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 	private LayoutInflater inflater;
 	private Context context;
 	private int mResource;
+	private String delivery;
 	private UserSession session;
 
-	public OfferAdapter(Context context, int resource, List<DonationOffer> offer, UserSession _session) {
+	public OfferAdapter(Context context, int resource,
+			List<DonationOffer> offer, UserSession _session) {
 		super(context, resource, offer);
 		this.context = context;
 		mResource = resource;
@@ -57,6 +61,7 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 			holder.size = (TextView) convertView.findViewById(R.id.size);
 			holder.quantity = (TextView) convertView
 					.findViewById(R.id.quantity);
+			holder.deliver = (TextView) convertView.findViewById(R.id.deliver);
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
@@ -66,16 +71,27 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 		holder.describtion.setText(dOffer.getItem().getName());
 		holder.size.setText("Size " + dOffer.getItem().getSize());
 		holder.quantity.setText("Quantity " + dOffer.getQuantity());
-		holder.size.setOnClickListener(new OnClickListener() {
+
+		holder.deliver.setText(delivery);
+		if (dOffer.isDeliver() == true) {
+			delivery = "Deliver";
+			holder.deliver.setTextColor(Color.BLUE);
+		} else {
+			delivery = "Collect";
+			holder.deliver.setTextColor(Color.GREEN);
+		}
+		holder.describtion.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				Bundle bundle = new Bundle();
-				
-				//new: instead of putting each field in a bundle, put the whole object as a serializable
+
+				// new: instead of putting each field in a bundle, put the whole
+				// object as a serializable
 				bundle.putSerializable("offer", dOffer);
-				bundle.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
-				
+				bundle.putSerializable(DonateMyStuffGlobals.KEY_SESSION,
+						session);
+
 				bundle.putString("id", dOffer.getId());
 				bundle.putString("donorid", dOffer.getDonorId());
 				bundle.putString("donationrequestid",
@@ -85,7 +101,8 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 				bundle.putString("itemid", dOffer.getItem().getId());
 
 				bundle.putLong("age", dOffer.getItem().getAge());
-				bundle.putInt("agerestriction", dOffer.getItem().getAgeRestriction());
+				bundle.putInt("agerestriction", dOffer.getItem()
+						.getAgeRestriction());
 				bundle.putString("name", dOffer.getItem().getName());
 				bundle.putInt("gendercode", dOffer.getItem().getGenderCode());
 				bundle.putString("type", dOffer.getItem().getType());
@@ -103,6 +120,7 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 		TextView describtion;
 		TextView size;
 		TextView quantity;
+		TextView deliver;
 	}
 
 }

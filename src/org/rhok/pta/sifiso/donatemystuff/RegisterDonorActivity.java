@@ -14,6 +14,8 @@ import com.android.volley.toolbox.Volley;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -27,6 +29,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
+
 /**
  * 
  * 
@@ -40,6 +43,9 @@ public class RegisterDonorActivity extends Activity {
 	private static final String MAKE_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/register";
 	private EditText name, surname, mobile, telephone, email, username,
 			password, unitnumber, unitname, streetname, areaname, city;
+	private String valid_name, valid_surname, valid_email, valid_streetname,
+			valid_city, valid_areaname, valid_unitname, valid_phone,
+			valid_cell;
 	private RadioGroup rdRole;
 	private Spinner spGender, spType, spProvince;
 	private Button registerSubmit, logingSubmit;
@@ -83,6 +89,7 @@ public class RegisterDonorActivity extends Activity {
 				role = checkedId;
 			}
 		});
+		textActions();
 		// buttons
 		registerSubmit = (Button) findViewById(R.id.registerSubmit);
 		registerSubmit.setOnClickListener(registerSubmitListner);
@@ -96,37 +103,71 @@ public class RegisterDonorActivity extends Activity {
 		public void onClick(View v) {
 			RequestQueue queue = Volley.newRequestQueue(v.getContext());
 			JSONObject offerJson;
-			try {
-				offerJson = createOfferJSON();
 
-				JsonObjectRequest request = new JsonObjectRequest(
-						Request.Method.POST, MAKE_DONATION_OFFER_SERVLET_URL,
-						offerJson, new Response.Listener<JSONObject>() {
+			if (name.getError() == null && surname.getError() == null
+					&& email.getError() == null && city.getError() == null
+					&& areaname.getError() == null
+					&& username.getText() != null && password.getText() != null
+					&& mobile.getError() == null
+					&& telephone.getError() == null) {
+				try {
+					offerJson = createOfferJSON();
 
-							@Override
-							public void onResponse(JSONObject response) {
-								Log.d(TAG, response.toString());
+					JsonObjectRequest request = new JsonObjectRequest(
+							Request.Method.POST,
+							MAKE_DONATION_OFFER_SERVLET_URL, offerJson,
+							new Response.Listener<JSONObject>() {
 
-								Toast.makeText(getApplicationContext(),
-										"Registered successfully",
-										Toast.LENGTH_LONG).show();
-							}
-						}, new Response.ErrorListener() {
+								@Override
+								public void onResponse(JSONObject response) {
+									Log.d(TAG, response.toString());
 
-							@Override
-							public void onErrorResponse(VolleyError error) {
-								Log.e(TAG, "issues with server", error);
-								error.getMessage();
-								error.printStackTrace();
+									Toast.makeText(getApplicationContext(),
+											"Registered successfully",
+											Toast.LENGTH_LONG).show();
+									try {
+										if (response.getInt("status") == 0) {
+											name.setText(null);
+											surname.setText(null);
+											mobile.setText(null);
+											telephone.setText(null);
+											email.setText(null);
+											username.setText(null);
+											password.setText(null);
+											unitname.setText(null);
+											unitnumber.setText(null);
+											streetname.setText(null);
+											areaname.setText(null);
+											city.setText(null);
 
-							}
+										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							}, new Response.ErrorListener() {
 
-						});
+								@Override
+								public void onErrorResponse(VolleyError error) {
+									Log.e(TAG, "issues with server", error);
+									error.getMessage();
+									error.printStackTrace();
 
-				queue.add(request);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+								}
+
+							});
+
+					queue.add(request);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			} else {
+				Toast.makeText(getApplicationContext(), "Invalid User Input",
+						Toast.LENGTH_SHORT).show();
+				return;
 			}
 		}
 	};
@@ -134,12 +175,12 @@ public class RegisterDonorActivity extends Activity {
 	private JSONObject createOfferJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 
-		json.put("name", name.getText().toString());
-		json.put("surname", surname.getText().toString());
+		json.put("name", valid_name);
+		json.put("surname", valid_surname);
 		json.put("gender", gender);
-		json.put("mobile", mobile.getText().toString());
-		json.put("telephone", telephone.getText().toString());
-		json.put("email", email.getText().toString());
+		json.put("mobile", valid_cell);
+		json.put("telephone", valid_phone);
+		json.put("email", valid_email);
 		json.put("username", username.getText().toString());
 		json.put("password", password.getText().toString());
 		json.put("role", role);
@@ -148,10 +189,10 @@ public class RegisterDonorActivity extends Activity {
 		// donated item
 		JSONObject jsonDonated = new JSONObject();
 		jsonDonated.put("unitnumber", unitnumber.getText().toString());
-		jsonDonated.put("unitname", unitname.getText().toString());
-		jsonDonated.put("streetname", streetname.getText().toString());
-		jsonDonated.put("areaname", areaname.getText().toString());
-		jsonDonated.put("city", city.getText().toString());
+		jsonDonated.put("unitname", valid_unitname);
+		jsonDonated.put("streetname", valid_streetname);
+		jsonDonated.put("areaname", valid_areaname);
+		jsonDonated.put("city", valid_city);
 		jsonDonated.put("province", province);
 		jsonDonated.put("country", "South Africa");
 		jsonDonated.put("xcoordinate", -203);
@@ -230,6 +271,355 @@ public class RegisterDonorActivity extends Activity {
 				});
 	}
 
+	private void textActions() {
+		name.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Name(name);
+
+			}
+		});
+		surname.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Surname(surname);
+			}
+		});
+		mobile.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Cell_Number_Validation(1, 10, mobile);
+			}
+		});
+		telephone.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Phone_Number_Validation(1, 10, telephone);
+			}
+		});
+
+		email.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Email(email);
+			}
+		});
+		unitname.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Unitname(unitname);
+			}
+		});
+		streetname.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Streetname(streetname);
+			}
+		});
+
+		areaname.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Areaname(areaname);
+			}
+		});
+		city.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_City(city);
+			}
+		});
+	}
+
+	// ==================================================validations==========================================//
+
+	public boolean Is_Valid_Name(EditText edt) throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Accept Alphabets Only.");
+			valid_name = null;
+			return false;
+		} else if (!edt.getText().toString().matches("[a-zA-Z ]+")) {
+			edt.setError("Accept Alphabets Only.");
+			valid_name = null;
+			return false;
+		} else {
+			valid_name = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Unitname(EditText edt) throws NumberFormatException {
+		if (!edt.getText().toString().matches("[a-zA-Z ]+")) {
+			edt.setError("Accept Alphabets Only.");
+			valid_unitname = null;
+			return false;
+		} else {
+			valid_unitname = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Areaname(EditText edt) throws NumberFormatException {
+		if (!edt.getText().toString().matches("[a-zA-Z ]+")) {
+			edt.setError("Accept Alphabets Only.");
+			valid_areaname = null;
+			return false;
+		} else {
+			valid_areaname = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_City(EditText edt) throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Accept Alphabets Only.");
+			valid_city = null;
+			return false;
+		} else if (!edt.getText().toString().matches("[a-zA-Z ]+")) {
+			edt.setError("Accept Alphabets Only.");
+			valid_city = null;
+			return false;
+		} else {
+			valid_city = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Cell_Number_Validation(int MinLen, int MaxLen,
+			EditText edt) throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Cell Number Only");
+			valid_cell = null;
+			return false;
+		} else if (Double.valueOf(edt.getText().toString()) < MinLen
+				|| Double.valueOf(edt.getText().length()) > MaxLen) {
+			edt.setError("Out of Range " + MinLen + " or " + MaxLen);
+			valid_cell = null;
+			return false;
+		} else {
+			valid_cell = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Phone_Number_Validation(int MinLen, int MaxLen,
+			EditText edt) throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Phone Number Only");
+			valid_phone = null;
+			return false;
+		} else if (Double.valueOf(edt.getText().toString()) < MinLen
+				|| Double.valueOf(edt.getText().length()) > MaxLen) {
+			edt.setError("Out of Range " + MinLen + " or " + MaxLen);
+			valid_phone = null;
+			return false;
+		} else {
+			valid_phone = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Streetname(EditText edt)
+			throws NumberFormatException {
+		if (!edt.getText().toString().matches("[a-zA-Z ]+")) {
+			edt.setError("Accept Alphabets Only.");
+			valid_streetname = null;
+			return false;
+		} else {
+			valid_streetname = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Surname(EditText edt) throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Accept Alphabets Only.");
+			valid_surname = null;
+			return false;
+		} else if (!edt.getText().toString().matches("[a-zA-Z ]+")) {
+			edt.setError("Accept Alphabets Only.");
+			valid_surname = null;
+			return false;
+		} else {
+			valid_surname = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Email(EditText edt) {
+		if (edt.getText().toString() == null) {
+			edt.setError("Invalid Email Address");
+			valid_email = null;
+			return false;
+		} else if (isEmailValid(edt.getText().toString()) == false) {
+			edt.setError("Invalid Email Address");
+			valid_email = null;
+			return false;
+		} else {
+			valid_email = edt.getText().toString();
+			return true;
+		}
+	}
+
+	boolean isEmailValid(CharSequence email) {
+		return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+
+	}
+
+	// ==================================================end
+	// validation==========================================//
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

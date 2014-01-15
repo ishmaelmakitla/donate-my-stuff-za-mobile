@@ -1,57 +1,46 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".BookDonateActivity" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true" >
 
-   
-
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:orientation="vertical"
+        tools:context=".BookDonateActivity" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/blankets" />
 
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/blankets" />
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:text="Quantity" />
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="17dp"
-                android:text="Quantity" />
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp" 
+            android:inputType="number">
 
-            <EditText
-                android:id="@+id/quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="17dp" >
+            <requestFocus />
+        </EditText>
 
-                <requestFocus />
-            </EditText>
+        <Button
+            android:id="@+id/blanketSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="submit" />
+    </LinearLayout>
 
-           
-
-            <Button
-                android:id="@+id/blanketSubmit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="submit" />
-        </LinearLayout>
-    </ScrollView>
-
-</RelativeLayout>
+</ScrollView>

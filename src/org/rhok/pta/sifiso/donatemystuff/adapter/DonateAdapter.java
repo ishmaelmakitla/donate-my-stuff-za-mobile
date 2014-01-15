@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
 /**
  * 
  * 
@@ -30,27 +31,29 @@ import com.squareup.picasso.Picasso;
 public class DonateAdapter extends BaseAdapter {
 
 	public enum DonationType {
-		SHOES, CLOTHES, BOOKS,  BLANKETS
+		SHOES, CLOTHES, BOOKS, BLANKETS
 	};
 
 	private Context context;
 	private String[] items;
-	
+
 	private static final int[] mThumbIds = { R.drawable.books,
-			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets,
-			};
-	
-	
+			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
+
 	public DonateAdapter(Context context) {
 		this.context = context;
 		items = context.getResources().getStringArray(R.array.donatio_items);
 
 	}
+
 	/**
 	 * Session Handling
 	 */
 	private UserSession session;
-	public void setSession(UserSession _session){ this.session = _session; }
+
+	public void setSession(UserSession _session) {
+		this.session = _session;
+	}
 
 	@Override
 	public int getCount() {
@@ -116,7 +119,7 @@ public class DonateAdapter extends BaseAdapter {
 		case 3:
 			donationType = DonationType.BLANKETS;
 			break;
-		
+
 		}
 
 		return donationType;
@@ -144,8 +147,9 @@ public class DonateAdapter extends BaseAdapter {
 		public void onClick(View view) {
 			Intent intent = null;
 			Bundle bundle = new Bundle();
-			bundle.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_OFFERS_LIST);
-			//set session
+			bundle.putInt(DonateMyStuffGlobals.KEY_MODE,
+					DonateMyStuffGlobals.MODE_OFFERS_LIST);
+			// set session
 			bundle.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
 			DonationType type = deriveDonationType(position);
 
@@ -169,7 +173,7 @@ public class DonateAdapter extends BaseAdapter {
 				intent = new Intent(context, ShoesDonationActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
-			
+
 			}
 
 			if (intent != null) {

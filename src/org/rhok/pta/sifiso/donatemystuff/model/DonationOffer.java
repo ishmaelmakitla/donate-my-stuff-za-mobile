@@ -17,8 +17,8 @@ import com.google.gson.JsonObject;
  * @author Ishmael Makitla
  * 
  */
-public class DonationOffer implements Serializable{
-	
+public class DonationOffer implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 	String id;
 	String donorid;

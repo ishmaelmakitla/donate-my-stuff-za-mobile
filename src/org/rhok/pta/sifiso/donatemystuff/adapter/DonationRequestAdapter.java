@@ -50,6 +50,7 @@ public class DonationRequestAdapter extends BaseAdapter {
 	
 	/**
 	 * This method simply initialized the Class properties
+	 * 
 	 * @param context
 	 * @param viewMineONLY
 	 */

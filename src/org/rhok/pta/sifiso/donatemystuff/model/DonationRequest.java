@@ -17,13 +17,46 @@ public class DonationRequest implements Serializable{
     Date requestdate;
     DonatedItem item;
     int quantity;
+    boolean collect;
     
     public DonationRequest(){
     	this.id = UUID.randomUUID().toString();
     }
     
         
-    public String getId() {
+    /**
+	 * @return the item
+	 */
+	public DonatedItem getItem() {
+		return item;
+	}
+
+
+	/**
+	 * @return the collect
+	 */
+	public boolean isCollect() {
+		return collect;
+	}
+
+
+	/**
+	 * @param collect the collect to set
+	 */
+	public void setCollect(boolean collect) {
+		this.collect = collect;
+	}
+
+
+	/**
+	 * @param item the item to set
+	 */
+	public void setItem(DonatedItem item) {
+		this.item = item;
+	}
+
+
+	public String getId() {
 		return id;
 	}
 

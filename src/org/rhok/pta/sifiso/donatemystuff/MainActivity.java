@@ -31,7 +31,7 @@ import android.widget.Toast;
  * 
  */
 public class MainActivity extends Activity {
-
+	private static final String TAG = BookDonateActivity.class.getSimpleName();
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+		mTitle = mDrawerTitle = getTitle();
 		//get the session object
 		Bundle extras = getIntent().getExtras();
 		session = (UserSession)extras.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
@@ -66,10 +66,11 @@ public class MainActivity extends Activity {
 		}
 		else{
 			//set title
+			Log.d(TAG, session.getUsername());
 			setTitle("Donate-My-Stuff: "+session.getUsername());
 		}
 
-		mTitle = mDrawerTitle = getTitle();
+		
 
 		// load slide menu items
 		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
@@ -107,7 +108,7 @@ public class MainActivity extends Activity {
 				.getResourceId(5, -1), false, "24"));
 		
 		//view all donation-requests
-		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons
+		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons
 				.getResourceId(6, -1), false, "25"));
 		
 		navMenuIcons.recycle();
@@ -260,7 +261,7 @@ public class MainActivity extends Activity {
 			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);
-			setTitle(navMenuTitles[position] +" "+ session.getUsername());
+			setTitle(session.getUsername()+" "+navMenuTitles[position] );
 			mDrawerLayout.closeDrawer(mDrawerList);
 		} else {
 			// error in creating fragment
@@ -271,6 +272,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void setTitle(CharSequence title) {
 		mTitle = title;
+		Log.d(TAG, mTitle.toString());
 		getActionBar().setTitle(mTitle);
 	}
 

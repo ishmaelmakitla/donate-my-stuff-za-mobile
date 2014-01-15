@@ -15,6 +15,8 @@ import com.android.volley.toolbox.Volley;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.app.Activity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 /**
  * 
  * 
@@ -45,13 +48,13 @@ public class ShoesDonationActivity extends Activity {
 
 	private Button shoeSubmit;
 	private int gender;
-	
-	//the Server URL based on the mode (Request/Offer)
+	private String valid_shoe_name, valid_shoe_size, valid_shoe_quantity;
+	// the Server URL based on the mode (Request/Offer)
 	private String serverURL = null;
-	
-	//session
+
+	// session
 	private UserSession session;
-	//mode
+	// mode
 	int mode = -1;
 
 	@Override
@@ -84,26 +87,28 @@ public class ShoesDonationActivity extends Activity {
 					public void onNothingSelected(AdapterView<?> arg0) {
 					}
 				});
-		
-		//check the mode or source of invoking this Intent (was it in Offers or Requests)
-				Bundle extras = getIntent().getExtras();
-				if(extras !=null){
-					//get the mode
-					mode = extras.getInt(DonateMyStuffGlobals.KEY_MODE);
-					Log.i(TAG, "Current Mode at ClothDonation is "+mode);
-					serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST? 
-							         DonateMyStuffGlobals.MAKE_DONATION_OFFER_SERVLET_URL: DonateMyStuffGlobals.MAKE_DONATION_REQUEST_SERVLET_URL);
-					
-					session = (UserSession)extras.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
-					String title = getTitle().toString()+session.getUsername();
-					setTitle(title);
-					
-					//if the mode is Requests, disable the Quantity field
-					if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
-						shoeQuantity.setText("-1");
-						shoeQuantity.setEnabled(false);
-					}
-				}
+		textValidation();
+		// check the mode or source of invoking this Intent (was it in Offers or
+		// Requests)
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			// get the mode
+			mode = extras.getInt(DonateMyStuffGlobals.KEY_MODE);
+			Log.i(TAG, "Current Mode at ClothDonation is " + mode);
+			serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST ? DonateMyStuffGlobals.MAKE_DONATION_OFFER_SERVLET_URL
+					: DonateMyStuffGlobals.MAKE_DONATION_REQUEST_SERVLET_URL);
+
+			session = (UserSession) extras
+					.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+			String title = getTitle().toString() + session.getUsername();
+			setTitle(title);
+
+			// if the mode is Requests, disable the Quantity field
+			if (mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
+				shoeQuantity.setText("-1");
+				shoeQuantity.setEnabled(false);
+			}
+		}
 	}
 
 	private OnClickListener shoeSubmitListner = new OnClickListener() {
@@ -112,85 +117,94 @@ public class ShoesDonationActivity extends Activity {
 		public void onClick(View v) {
 			RequestQueue queue = Volley.newRequestQueue(v.getContext());
 			JSONObject offerJson;
-			try {
-				offerJson = createOfferJSON();
+			if (valid_shoe_name != null && valid_shoe_quantity != null
+					&& valid_shoe_size != null && session.getUserID() != null) {
+				try {
+					offerJson = createOfferJSON();
 
-				JsonObjectRequest request = new JsonObjectRequest(
-						Request.Method.POST, MAKE_DONATION_OFFER_SERVLET_URL,
-						offerJson, new Response.Listener<JSONObject>() {
+					JsonObjectRequest request = new JsonObjectRequest(
+							Request.Method.POST,
+							MAKE_DONATION_OFFER_SERVLET_URL, offerJson,
+							new Response.Listener<JSONObject>() {
 
-							@Override
-							public void onResponse(JSONObject response) {
-								try {
-									Toast.makeText(
-											getApplicationContext(),
-											response.getString("message")
-													.toString(),
-											Toast.LENGTH_LONG).show();
-									if (response.getInt("status") == 0) {
-										shoeName.setText(null);
-										shoeSize.setText(null);
-										shoeQuantity.setText(null);
+								@Override
+								public void onResponse(JSONObject response) {
+									try {
+										Toast.makeText(
+												getApplicationContext(),
+												response.getString("message")
+														.toString(),
+												Toast.LENGTH_LONG).show();
+										if (response.getInt("status") == 0) {
+											shoeName.setText(null);
+											shoeSize.setText(null);
+											shoeQuantity.setText(null);
 
+										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
 									}
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
 								}
-							}
-						}, new Response.ErrorListener() {
+							}, new Response.ErrorListener() {
 
-							@Override
-							public void onErrorResponse(VolleyError error) {
-								Log.e(TAG, "issues with server", error);
-								error.printStackTrace();
+								@Override
+								public void onErrorResponse(VolleyError error) {
+									Log.e(TAG, "issues with server", error);
+									error.printStackTrace();
 
-							}
+								}
 
-						});
+							});
 
-				queue.add(request);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+					queue.add(request);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				shoeName.setText(null);
+				shoeQuantity.setText(null);
+				shoeSize.setText(null);
+			} else {
+				Toast.makeText(getApplicationContext(), "Invalid User Input",
+						Toast.LENGTH_SHORT).show();
+				return;
 			}
-
 		}
 	};
 
 	private JSONObject createOfferJSON() throws JSONException {
 		JSONObject json = new JSONObject();
 		String me = session.getUserID();
-		//these are depending on the mode of operation...
-		if(mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST){
-				json.put("beneficiaryid", me); 
-				//this is not a bid...
-				json.put("donationofferid", null);
-				//by default donations are delivered
-				json.put("collect", false);
-			}
-	   else{
-				json.put("donorid", me);
-				json.put("donationrequestid", null);
-				json.put("deliver", true);
-		 }
+		// these are depending on the mode of operation...
+		if (mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
+			json.put("beneficiaryid", me);
+			// this is not a bid...
+			json.put("donationofferid", null);
+			// by default donations are delivered
+			json.put("collect", false);
+		} else {
+			json.put("donorid", me);
+			json.put("donationrequestid", null);
+			json.put("deliver", true);
+		}
 		// donated item
 		JSONObject jsonDonated = new JSONObject();
-		jsonDonated.put("name", shoeName.getText().toString());
-		jsonDonated.put("size", shoeSize.getText().toString());
+		jsonDonated.put("name", valid_shoe_name);
+		jsonDonated.put("size", valid_shoe_size);
 		jsonDonated.put("gender", gender);
 		jsonDonated.put("type", "shoes");
 
 		json.put("item", jsonDonated);
 
 		int count = 0;
-		try {			
-			 //quantity only set for Offers,			
-			  if(mode != DonateMyStuffGlobals.MODE_REQUESTS_LIST ){
-				  count = Integer.parseInt(shoeQuantity.getText().toString());
-				  json.put("quantity", count);
-			  }
-			
+		try {
+			// quantity only set for Offers,
+			if (mode != DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
+				count = Integer.parseInt(valid_shoe_quantity);
+				json.put("quantity", count);
+			}
+
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
@@ -200,6 +214,129 @@ public class ShoesDonationActivity extends Activity {
 		Log.d(TAG, "Returning donation offer json=" + json);
 
 		return json;
+	}
+
+	private void textValidation() {
+		shoeName.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Shoe_Name(shoeName);
+			}
+		});
+		shoeSize.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Shoe_Size_Validation(1, 4, shoeSize);
+			}
+		});
+		shoeQuantity.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				Is_Valid_Shoe_Quantity_Validation(1, 4, shoeQuantity);
+			}
+		});
+
+	}
+
+	public boolean Is_Valid_Shoe_Quantity_Validation(int MinLen, int MaxLen,
+			EditText edt) throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Quantity Number Only");
+			valid_shoe_quantity = null;
+			return false;
+		} else if (Double.valueOf(edt.getText().toString()) < MinLen
+				|| Double.valueOf(edt.getText().length()) > MaxLen) {
+			edt.setError("Out of Range " + MinLen + " or " + MaxLen);
+			valid_shoe_quantity = null;
+			return false;
+		} else {
+			valid_shoe_quantity = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Shoe_Name(EditText edt)
+			throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Accept Alphabets Only.");
+			valid_shoe_name = null;
+			return false;
+		} else if (!edt.getText().toString().matches("[a-zA-Z ]+")) {
+			edt.setError("Accept Alphabets Only.");
+			valid_shoe_name = null;
+			return false;
+		} else {
+			valid_shoe_name = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Valid_Shoe_Size_Validation(int MinLen, int MaxLen,
+			EditText edt) throws NumberFormatException {
+		if (edt.getText().toString().length() <= 0) {
+			edt.setError("Size Number Only");
+			valid_shoe_size = null;
+			return false;
+		} else if (Double.valueOf(edt.getText().toString()) < MinLen
+				|| Double.valueOf(edt.getText().length()) > MaxLen) {
+			edt.setError("Out of Range " + MinLen + " or " + MaxLen);
+			valid_shoe_size = null;
+			return false;
+		} else {
+			valid_shoe_size = edt.getText().toString();
+			return true;
+		}
+
 	}
 
 	@Override

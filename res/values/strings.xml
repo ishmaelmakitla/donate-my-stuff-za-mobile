@@ -12,11 +12,11 @@
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item>Home</item>
+        <item>Welcome</item>
         <item>Make Donation</item>
-        <item>Request Donation</item>        
-        <item>My Donations Requests</item>
-        <item>My Donations Offers</item>
+        <item>Request Donation</item>
+        <item>Donations Requests</item>
+        <item>Donations Offers</item>
         <item>All Donation Offers</item>
         <item>All Donation Requests</item>
     </string-array>
@@ -76,6 +76,8 @@
         <item>Western Cape</item>
     </string-array>
 
+    <string name="title_section1">Donations</string>
+    <string name="title_section2">Requests</string>
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <!-- <string name="title_activity_donate_fragment">DonateFragment</string> -->
@@ -92,7 +94,6 @@
     <string name="title_activity_unbidded_request">UnbiddedRequestActivity</string>
     <string name="title_activity_detail_item_view">DetailItemViewActivity</string>
     <string name="title_activity_make_request">MakeRequestActivity</string>
-    
     <string name="prompt_label_request">Please Specify How Many of the Offered Items You Need</string>
     <string name="prompt_label_offer">Please Specify How Many of the Requested Items You Are Offering</string>
 
