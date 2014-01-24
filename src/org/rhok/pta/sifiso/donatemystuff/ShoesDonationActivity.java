@@ -15,10 +15,12 @@ import com.android.volley.toolbox.Volley;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -26,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -45,7 +48,8 @@ public class ShoesDonationActivity extends Activity {
 	private EditText shoeSize;
 	private Spinner shoeGender;
 	private EditText shoeQuantity;
-
+	private TextView textView4;
+	private Bundle b;
 	private Button shoeSubmit;
 	private int gender;
 	private String valid_shoe_name, valid_shoe_size, valid_shoe_quantity;
@@ -64,6 +68,7 @@ public class ShoesDonationActivity extends Activity {
 		shoeName = (EditText) findViewById(R.id.shoeName);
 		shoeSize = (EditText) findViewById(R.id.shoeSize);
 		shoeGender = (Spinner) findViewById(R.id.shoeGender);
+		textView4 = (TextView) findViewById(R.id.textView4);
 		shoeQuantity = (EditText) findViewById(R.id.shoeQuantity);
 		shoeSubmit = (Button) findViewById(R.id.shoeSubmit);
 		shoeSubmit.setOnClickListener(shoeSubmitListner);
@@ -105,7 +110,9 @@ public class ShoesDonationActivity extends Activity {
 
 			// if the mode is Requests, disable the Quantity field
 			if (mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
-				shoeQuantity.setText("-1");
+				textView4.setVisibility(TextView.GONE);
+				shoeQuantity.setVisibility(EditText.GONE);
+				shoeQuantity.setText("1");
 				shoeQuantity.setEnabled(false);
 			}
 		}
@@ -136,9 +143,20 @@ public class ShoesDonationActivity extends Activity {
 														.toString(),
 												Toast.LENGTH_LONG).show();
 										if (response.getInt("status") == 0) {
-											shoeName.setText(null);
-											shoeSize.setText(null);
-											shoeQuantity.setText(null);
+											b = new Bundle();
+											b.putSerializable(
+													DonateMyStuffGlobals.KEY_SESSION,
+													session);
+											finish();
+											startActivity(new Intent(
+													getApplicationContext(),
+													ShoesDonationActivity.class)
+													.putExtras(b));
+											/*
+											 * shoeName.setText(null);
+											 * shoeSize.setText(null);
+											 * shoeQuantity.setText(null);
+											 */
 
 										}
 									} catch (JSONException e) {
@@ -343,7 +361,26 @@ public class ShoesDonationActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.shoes_donation, menu);
+
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.back_icon:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

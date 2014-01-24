@@ -37,8 +37,8 @@ public class DonateAdapter extends BaseAdapter {
 	private Context context;
 	private String[] items;
 
-	private static final int[] mThumbIds = { R.drawable.books,
-			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
+	private static final int[] mThumbIds = { R.drawable.book, R.drawable.cloth,
+			R.drawable.shoe, R.drawable.blanket };
 
 	public DonateAdapter(Context context) {
 		this.context = context;
@@ -89,7 +89,7 @@ public class DonateAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Picasso.with(context).load(mThumbIds[position]).fit().into(holder.img);
+		Picasso.with(context).load(mThumbIds[position]).resize(300, 300).into(holder.img);
 		holder.click.setOnClickListener(new CustomClickListener(
 				items[position], position));
 		holder.textItem.setText(items[position]);

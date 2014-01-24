@@ -9,6 +9,8 @@ import org.rhok.pta.sifiso.donatemystuff.model.DonationOffer;
 import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
+import com.squareup.picasso.Picasso;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -37,12 +40,16 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 	private int mResource;
 	private String delivery;
 	private UserSession session;
+	private int type;
+	private static final int[] mThumbIds = { R.drawable.books, R.drawable.clothes,
+		R.drawable.shoes, R.drawable.blankets };
 
 	public OfferAdapter(Context context, int resource,
-			List<DonationOffer> offer, UserSession _session) {
+			List<DonationOffer> offer, UserSession _session, int type) {
 		super(context, resource, offer);
 		this.context = context;
 		mResource = resource;
+		this.type = type;
 		donationOffers = offer;
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -55,7 +62,9 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 		final Holder holder;
 		if (convertView == null) {
 			holder = new Holder();
+			 
 			convertView = inflater.inflate(mResource, parent, false);
+			holder.logo  = (ImageView) convertView.findViewById(R.id.logo);
 			holder.describtion = (TextView) convertView
 					.findViewById(R.id.description);
 			holder.size = (TextView) convertView.findViewById(R.id.size);
@@ -67,7 +76,9 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 			holder = (Holder) convertView.getTag();
 		}
 
+		
 		final DonationOffer dOffer = donationOffers.get(position);
+		Picasso.with(context).load(mThumbIds[type]).resize(200, 200).centerInside().into(holder.logo); 
 		holder.describtion.setText(dOffer.getItem().getName());
 		holder.size.setText("Size " + dOffer.getItem().getSize());
 		holder.quantity.setText("Quantity " + dOffer.getQuantity());
@@ -117,6 +128,7 @@ public class OfferAdapter extends ArrayAdapter<DonationOffer> {
 	}
 
 	class Holder {
+		ImageView logo;
 		TextView describtion;
 		TextView size;
 		TextView quantity;

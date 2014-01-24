@@ -405,6 +405,7 @@ public class TapFragmentActivity extends FragmentActivity implements
 
 	private static void listAdapter(List<DonationOffer> list, Activity activity) {
 		Bundle b = activity.getIntent().getExtras();
+		int type =0;
 		session = (UserSession) b
 				.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
 		if (list == null) {
@@ -412,7 +413,7 @@ public class TapFragmentActivity extends FragmentActivity implements
 		}
 		Log.d(TAG, "Sakubona2 " + activity.getApplicationContext());
 		adapter = new OfferAdapter(activity.getApplicationContext(),
-				R.layout.customize_offer_list, list, session);
+				R.layout.customize_offer_list, list, session, type);
 		dummyTextView.setAdapter(adapter);
 	}
 

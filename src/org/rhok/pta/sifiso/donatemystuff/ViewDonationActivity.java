@@ -46,7 +46,7 @@ public class ViewDonationActivity extends Activity {
 	private ListView listRequest;
 	private OfferAdapter adapter;
 	private String type;
-
+	private int position;
 	private int mode = -1;
 
 	private UserSession session;
@@ -61,6 +61,7 @@ public class ViewDonationActivity extends Activity {
 	private void setFields() {
 		Bundle b = getIntent().getExtras();
 		type = b.getString("type");
+		position = b.getInt("ItemPosition");
 		// now the Server URL depends on whether the mode is OFFERS or REQUESTS
 		mode = b.getInt(DonateMyStuffGlobals.KEY_MODE);
 		String serverURL = (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST ? DonateMyStuffGlobals.GET_DONATION_OFFER_SERVLET_URL
@@ -89,7 +90,7 @@ public class ViewDonationActivity extends Activity {
 
 		Log.d(TAG, type);
 		listRequest = (ListView) findViewById(R.id.listRequest);
-		
+
 		RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 		StringRequest request = new StringRequest(Request.Method.GET,
 				serverURL, new Listener<String>() {
@@ -213,7 +214,7 @@ public class ViewDonationActivity extends Activity {
 			List<DonationRequest> requestsList) {
 		DonationRequestListAdapter requestsListAdapter = new DonationRequestListAdapter(
 				getApplicationContext(), R.layout.customize_request_list,
-				requestsList, session);
+				requestsList, session, position);
 		listRequest.setAdapter(requestsListAdapter);
 	}
 
@@ -223,12 +224,13 @@ public class ViewDonationActivity extends Activity {
 	 * @param list
 	 */
 	private void listAdapter(List<DonationOffer> list) {
+
 		if (list == null) {
 			list = new ArrayList<DonationOffer>();
 		}
 
 		adapter = new OfferAdapter(getApplicationContext(),
-				R.layout.customize_offer_list, list, session);
+				R.layout.customize_offer_list, list, session, position);
 		listRequest.setAdapter(adapter);
 	}
 
@@ -236,6 +238,9 @@ public class ViewDonationActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.view_request, menu);
+		getActionBar().setTitle("Back");
+		getActionBar().setIcon(R.drawable.ic_action_previous_item);
+		getActionBar().setHomeButtonEnabled(true);
 		return true;
 	}
 

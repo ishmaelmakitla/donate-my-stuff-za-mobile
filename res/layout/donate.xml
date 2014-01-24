@@ -1,25 +1,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
- <ImageView
-       android:id="@+id/imageView1"
-       android:layout_width="wrap_content"
-       android:layout_height="170dp"
-       android:layout_alignParentLeft="true"
-       android:layout_alignParentRight="true"
-       android:layout_alignParentTop="true"
-       android:src="@drawable/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_launcher" />
+
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        
+        android:layout_below="@+id/imageView1"
         android:horizontalSpacing="0dp"
         android:listSelector="@android:color/transparent"
         android:numColumns="2"
         android:scrollingCache="false"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp"
-        android:layout_below="@+id/imageView1" />
+        android:verticalSpacing="0dp" />
 
 </RelativeLayout>

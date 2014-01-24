@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
 /**
  * 
  * 
@@ -25,40 +26,47 @@ import com.squareup.picasso.Picasso;
  * 
  */
 public class DonationRequestAdapter extends BaseAdapter {
-	
-	private static final String TAG = DonationRequestAdapter.class.getSimpleName();
+
+	private static final String TAG = DonationRequestAdapter.class
+			.getSimpleName();
+
 	public enum DonationType {
 		SHOES, CLOTHES, BOOKS, BLANKETS
 	};
 
 	private Context context;
 	private String[] items;
-	private static final int[] mThumbIds = { R.drawable.books,
-			R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
-	
+	private static final int[] mThumbIds = { R.drawable.book, R.drawable.cloth,
+			R.drawable.shoe, R.drawable.blanket };
+	private int logos;
+
 	private boolean isViewingMineOnly = false;
 	private int mode = DonateMyStuffGlobals.MODE_REQUESTS_LIST;
 
 	public DonationRequestAdapter(Context context) {
-		initialize(context, false, -1, null);	
+		initialize(context, false, -1, null);
 	}
-	
-	public DonationRequestAdapter(Context context, boolean viewMineONLY, int _mode, UserSession _session) {
-		initialize(context, viewMineONLY, _mode, _session);	
+
+	public DonationRequestAdapter(Context context, boolean viewMineONLY,
+			int _mode, UserSession _session) {
+		initialize(context, viewMineONLY, _mode, _session);
 	}
+
 	private UserSession session;
-	
+
 	/**
 	 * This method simply initialized the Class properties
 	 * 
 	 * @param context
 	 * @param viewMineONLY
 	 */
-	private void initialize(Context context, boolean viewMineONLY, int _mode, UserSession _session){
+	private void initialize(Context context, boolean viewMineONLY, int _mode,
+			UserSession _session) {
 		this.context = context;
-		this.isViewingMineOnly = viewMineONLY;	
+		this.isViewingMineOnly = viewMineONLY;
 		items = context.getResources().getStringArray(R.array.donatio_items);
-		this.mode = (_mode== -1? DonateMyStuffGlobals.MODE_REQUESTS_LIST:_mode);
+		this.mode = (_mode == -1 ? DonateMyStuffGlobals.MODE_REQUESTS_LIST
+				: _mode);
 		this.session = _session;
 	}
 
@@ -96,7 +104,8 @@ public class DonationRequestAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Picasso.with(context).load(mThumbIds[position]).fit().into(holder.img);
+		Picasso.with(context).load(mThumbIds[position]).resize(300, 300)
+				.into(holder.img);
 		holder.click.setOnClickListener(new CustomClickListener(
 				items[position], position));
 		holder.textItem.setText(items[position]);
@@ -105,8 +114,7 @@ public class DonationRequestAdapter extends BaseAdapter {
 		holder.type = type;
 		convertView.setTag(holder);
 
-		Log.d(TAG, "Item At Position "
-				+ position + " is " + type);
+		Log.d(TAG, "Item At Position " + position + " is " + type);
 		return convertView;
 	}
 
@@ -153,19 +161,23 @@ public class DonationRequestAdapter extends BaseAdapter {
 		public void onClick(View view) {
 			Intent intent = null;
 			Bundle b = new Bundle();
-			//indicate whether the list of requests/offers to be shown for each category are the ones submitted by current user
-			b.putBoolean(DonateMyStuffGlobals.FLAG_VIEW_MINE_ONLY, isViewingMineOnly);
-			
+			// indicate whether the list of requests/offers to be shown for each
+			// category are the ones submitted by current user
+			b.putBoolean(DonateMyStuffGlobals.FLAG_VIEW_MINE_ONLY,
+					isViewingMineOnly);
+
 			DonationType type = deriveDonationType(position);
-			
+
 			b.putInt(DonateMyStuffGlobals.KEY_MODE, mode);
 			b.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
-			
+
 			Log.d(DonationRequestAdapter.class.getSimpleName(),
 					" Clicked-Donation-Type:: " + type);
 			switch (type) {
 			case BOOKS:
 				b.putString("type", "books");
+				b.putInt("ItemPosition", position);
+				b.putInt("image_logo", R.drawable.book);
 				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
 
@@ -175,18 +187,24 @@ public class DonationRequestAdapter extends BaseAdapter {
 
 			case CLOTHES:
 				b.putString("type", "clothes");
+				b.putInt("ItemPosition", position);
+				b.putInt("image_logo", R.drawable.cloth);
 				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
 			case SHOES:
 				b.putString("type", "shoes");
+				b.putInt("ItemPosition", position);
+				b.putInt("image_logo", R.drawable.shoe);
 				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
 			case BLANKETS:
 				b.putString("type", "blankets");
+				b.putInt("ItemPosition", position);
+				b.putInt("image_logo", R.drawable.blanket);
 				intent = new Intent(context, ViewDonationActivity.class)
 						.putExtras(b);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

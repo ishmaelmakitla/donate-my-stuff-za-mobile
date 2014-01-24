@@ -2,16 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_sky"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".BookDonateActivity" >
+    tools:context=".DetailItemViewActivity" >
 
     <ScrollView
         android:id="@+id/scrollView1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
 
@@ -68,7 +69,7 @@
                 android:id="@+id/requestSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="request"/>
+                android:text="request" />
         </LinearLayout>
     </ScrollView>
 

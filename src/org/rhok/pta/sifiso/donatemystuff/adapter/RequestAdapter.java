@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
 /**
  * 
  * 
@@ -36,8 +37,8 @@ import com.squareup.picasso.Picasso;
  */
 public class RequestAdapter extends BaseAdapter {
 	public enum DonationType {
-		SHOES, CLOTHES, BOOKS, BLANKETS;		
-		public static DonationType toType(String type){
+		SHOES, CLOTHES, BOOKS, BLANKETS;
+		public static DonationType toType(String type) {
 			return valueOf(type.toUpperCase());
 		}
 	};
@@ -45,9 +46,10 @@ public class RequestAdapter extends BaseAdapter {
 	private Context context;
 	private String[] items;
 	private UserSession session;
-	
-	private static final int[] mThumbIds = { R.drawable.books,R.drawable.clothes, R.drawable.shoes, R.drawable.blankets, };
-	
+
+	private static final int[] mThumbIds = { R.drawable.book, R.drawable.cloth,
+			R.drawable.shoe, R.drawable.blanket };
+
 	public RequestAdapter(Context _context, UserSession userSession) {
 		this.context = _context;
 		items = context.getResources().getStringArray(R.array.donatio_items);
@@ -88,7 +90,7 @@ public class RequestAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		Picasso.with(context).load(mThumbIds[position]).fit().into(holder.img);
+		Picasso.with(context).load(mThumbIds[position]).resize(300, 300).into(holder.img);
 		holder.click.setOnClickListener(new CustomClickListener(
 				items[position], position));
 		holder.textItem.setText(items[position]);
@@ -146,18 +148,21 @@ public class RequestAdapter extends BaseAdapter {
 		public void onClick(View view) {
 			Intent donationRequestIntent = null;
 			Bundle b = new Bundle();
-			//indicate the list to be retrieved is a list of Donation-Requests, for the category of item selected below
-			b.putInt(DonateMyStuffGlobals.KEY_MODE, DonateMyStuffGlobals.MODE_REQUESTS_LIST);
+			// indicate the list to be retrieved is a list of Donation-Requests,
+			// for the category of item selected below
+			b.putInt(DonateMyStuffGlobals.KEY_MODE,
+					DonateMyStuffGlobals.MODE_REQUESTS_LIST);
 			b.putSerializable(DonateMyStuffGlobals.KEY_SESSION, session);
-			
+
 			DonationType type = deriveDonationType(position);
 
-			Log.d(RequestAdapter.class.getSimpleName()," Clicked-Donation-Type:: " + type);
+			Log.d(RequestAdapter.class.getSimpleName(),
+					" Clicked-Donation-Type:: " + type);
 			switch (type) {
 			case BOOKS:
 				b.putString("type", "book");
-				donationRequestIntent = new Intent(context, BookDonateActivity.class)
-						.putExtras(b);
+				donationRequestIntent = new Intent(context,
+						BookDonateActivity.class).putExtras(b);
 
 				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -165,20 +170,20 @@ public class RequestAdapter extends BaseAdapter {
 
 			case CLOTHES:
 				b.putString("type", "clothes");
-				donationRequestIntent = new Intent(context, ClothDonationActivity.class)
-						.putExtras(b);
+				donationRequestIntent = new Intent(context,
+						ClothDonationActivity.class).putExtras(b);
 				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
 			case SHOES:
 				b.putString("type", "shoes");
-				donationRequestIntent = new Intent(context, ShoesDonationActivity.class)
-						.putExtras(b);
+				donationRequestIntent = new Intent(context,
+						ShoesDonationActivity.class).putExtras(b);
 				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
 			case BLANKETS:
 				b.putString("type", "blankets");
-				donationRequestIntent = new Intent(context, BlanketDonationActivity.class)
-						.putExtras(b);
+				donationRequestIntent = new Intent(context,
+						BlanketDonationActivity.class).putExtras(b);
 				donationRequestIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				break;
 			}

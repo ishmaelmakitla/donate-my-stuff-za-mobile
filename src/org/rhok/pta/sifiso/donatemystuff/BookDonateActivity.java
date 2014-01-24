@@ -6,15 +6,18 @@ import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -39,6 +42,8 @@ public class BookDonateActivity extends Activity {
 	private EditText bookQuantity;
 	private EditText bookAgeRest;
 	private Button bookSubmit;
+	private TextView textView4;
+	private Bundle b;
 	private String valid_book_name, valid_book_size, valid_book_age,
 			valid_book_quantity, valid_book_age_rest;
 
@@ -58,7 +63,7 @@ public class BookDonateActivity extends Activity {
 		bookAgeRest = (EditText) findViewById(R.id.bookAgeRest);
 		bookQuantity = (EditText) findViewById(R.id.bookQuantity);
 		bookAge = (EditText) findViewById(R.id.bookAge);
-
+		textView4 = (TextView) findViewById(R.id.textView4);
 		bookSubmit = (Button) findViewById(R.id.bookSubmit);
 		bookSubmit.setOnClickListener(submitBookListner);
 
@@ -83,8 +88,11 @@ public class BookDonateActivity extends Activity {
 
 			// if the mode is Requests, disable the Quantity field
 			if (mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
-				bookQuantity.setText("-1");
+				textView4.setVisibility(TextView.GONE);
+				bookQuantity.setVisibility(EditText.GONE);
+				bookQuantity.setText("1");
 				bookQuantity.setEnabled(false);
+				valid_book_quantity = bookQuantity.getText().toString();
 			}
 		}
 	}
@@ -112,11 +120,22 @@ public class BookDonateActivity extends Activity {
 									// perhaps at this point we clear the fields
 									try {
 										if (response.getInt("status") == 0) {
-											bookName.setText(null);
-											bookAge.setText(null);
-											bookAgeRest.setText(null);
-											bookQuantity.setText(null);
-											bookSize.setText(null);
+											b = new Bundle();
+											b.putSerializable(
+													DonateMyStuffGlobals.KEY_SESSION,
+													session);
+											/*
+											 * bookName.setText(null);
+											 * bookAge.setText(null);
+											 * bookAgeRest.setText(null);
+											 * bookQuantity.setText(null);
+											 * bookSize.setText(null);
+											 */
+											finish();
+											startActivity(new Intent(
+													getApplicationContext(),
+													BookDonateActivity.class)
+													.putExtras(b));
 										}
 									} catch (JSONException e) {
 										// TODO Auto-generated catch block
@@ -139,7 +158,6 @@ public class BookDonateActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
 
 			} else {
 				Toast.makeText(getApplicationContext(), "Invalid User Input",
@@ -280,7 +298,7 @@ public class BookDonateActivity extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				Is_Valid_Book_Age_Validation(1, 4, bookAge);
+				Is_Valid_Book_Age_Validation(1, 5, bookAge);
 			}
 		});
 		bookQuantity.addTextChangedListener(new TextWatcher() {
@@ -422,7 +440,26 @@ public class BookDonateActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.book_donate, menu);
+
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.back_icon:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

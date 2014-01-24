@@ -6,11 +6,13 @@ import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -39,7 +41,7 @@ public class BlanketDonationActivity extends Activity {
 	private EditText quantity;
 	private String valid_quantity;
 	private Button blanketSubmit;
-
+	private Bundle b;
 	// the Server URL based on the mode (Request/Offer)
 	private String serverURL = null;
 	// session
@@ -73,8 +75,9 @@ public class BlanketDonationActivity extends Activity {
 
 			// if the mode is Requests, disable the Quantity field
 			if (mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
-				quantity.setText("-1");
+				quantity.setText("1");
 				quantity.setEnabled(false);
+				valid_quantity = quantity.getText().toString();
 			}
 		}
 	}
@@ -85,28 +88,36 @@ public class BlanketDonationActivity extends Activity {
 		public void onClick(View v) {
 			RequestQueue queue = Volley.newRequestQueue(v.getContext());
 			JSONObject offerJson;
+
 			quantity.addTextChangedListener(new TextWatcher() {
 
 				@Override
 				public void onTextChanged(CharSequence s, int start,
 						int before, int count) {
 					// TODO Auto-generated method stub
-
+					Log.d(TAG, "Quantity1 " + valid_quantity + " and UserId "
+							+ session.getUserID());
 				}
 
 				@Override
 				public void beforeTextChanged(CharSequence s, int start,
 						int count, int after) {
 					// TODO Auto-generated method stub
-
+					Log.d(TAG, "Quantity2 " + valid_quantity + " and UserId "
+							+ session.getUserID());
 				}
 
 				@Override
 				public void afterTextChanged(Editable s) {
 					// TODO Auto-generated method stub
+					Log.d(TAG, "Quantity3 " + valid_quantity + " and UserId "
+							+ session.getUserID());
 					Is_Valid_Quantity_Validation(1, 4, quantity);
 				}
 			});
+			Log.d(TAG,
+					"Quantity " + valid_quantity + " and UserId "
+							+ session.getUserID());
 			if (valid_quantity != null && session.getUserID() != null) {
 				try {
 					offerJson = createOfferJSON();
@@ -125,7 +136,17 @@ public class BlanketDonationActivity extends Activity {
 														.toString(),
 												Toast.LENGTH_SHORT).show();
 										if (response.getInt("status") == 0) {
-											quantity.setText(null);
+											b = new Bundle();
+											b.putSerializable(
+													DonateMyStuffGlobals.KEY_SESSION,
+													session);
+											finish();
+											startActivity(new Intent(
+													getApplicationContext(),
+													BlanketDonationActivity.class)
+													.putExtras(b));
+											// quantity.setText(null);
+											finish();
 										}
 									} catch (JSONException e) {
 										// TODO Auto-generated catch block
@@ -202,7 +223,7 @@ public class BlanketDonationActivity extends Activity {
 	public boolean Is_Valid_Quantity_Validation(int MinLen, int MaxLen,
 			EditText edt) throws NumberFormatException {
 		if (edt.getText().toString().length() <= 0) {
-			edt.setError("Phone Number Only");
+			edt.setError("Quantity Number Only");
 			valid_quantity = null;
 			return false;
 		} else if (Double.valueOf(edt.getText().toString()) < MinLen
@@ -221,7 +242,28 @@ public class BlanketDonationActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.blanket_donation, menu);
+
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.back_icon:
+
+			finish();
+			break;
+
+		default:
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 }

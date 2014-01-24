@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
 /**
  * 
  * 
@@ -48,7 +50,7 @@ public class MainActivity extends Activity {
 
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
-	
+
 	private UserSession session;
 
 	@Override
@@ -56,21 +58,22 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mTitle = mDrawerTitle = getTitle();
-		//get the session object
+		// get the session object
 		Bundle extras = getIntent().getExtras();
-		session = (UserSession)extras.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
-		if(session == null){
-			Toast.makeText(this, "There was a problem getting your User Information. You Need To login Afg", Toast.LENGTH_LONG).show();
-			//close this Activity so the previous login page shows...
+		session = (UserSession) extras
+				.getSerializable(DonateMyStuffGlobals.KEY_SESSION);
+		if (session == null) {
+			Toast.makeText(
+					this,
+					"There was a problem getting your User Information. You Need To login Afg",
+					Toast.LENGTH_LONG).show();
+			// close this Activity so the previous login page shows...
 			finish();
-		}
-		else{
-			//set title
+		} else {
+			// set title
 			Log.d(TAG, session.getUsername());
-			setTitle("Donate-My-Stuff: "+session.getUsername());
+			setTitle("Donate-My-Stuff: " + session.getUsername());
 		}
-
-		
 
 		// load slide menu items
 		navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
@@ -88,29 +91,29 @@ public class MainActivity extends Activity {
 		// Home
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons
 				.getResourceId(0, -1)));
-		//Make a Donate
+		// Make a Donate
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons
 				.getResourceId(1, -1)));
-		
+
 		// Make a request for donation
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons
 				.getResourceId(2, -1)));
 		// view all MY donation requests
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons
 				.getResourceId(3, -1), false, "22"));
-		
-		//view all MY donation offers
+
+		// view all MY donation offers
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons
 				.getResourceId(4, -1), false, "23"));
-		
-		//view all donation-offers
+
+		// view all donation-offers
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons
 				.getResourceId(5, -1), false, "24"));
-		
-		//view all donation-requests
+
+		// view all donation-requests
 		navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons
 				.getResourceId(6, -1), false, "25"));
-		
+
 		navMenuIcons.recycle();
 
 		mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
@@ -210,7 +213,8 @@ public class MainActivity extends Activity {
 			fragment = fd;
 			break;
 		case 2:
-			Log.d("check", "FragmentRequest - Clicked - Session Object is "+session);
+			Log.d("check", "FragmentRequest - Clicked - Session Object is "
+					+ session);
 			FragmentRequest fr = new FragmentRequest();
 			fr.setSession(session);
 			fragment = fr;
@@ -220,9 +224,10 @@ public class MainActivity extends Activity {
 			DonateFragment viewRequestsFragment = new DonateFragment();
 			viewRequestsFragment.setIsViewingMineOnly(true);
 			viewRequestsFragment.setSession(session);
-			viewRequestsFragment.setMode(DonateMyStuffGlobals.MODE_REQUESTS_LIST);
+			viewRequestsFragment
+					.setMode(DonateMyStuffGlobals.MODE_REQUESTS_LIST);
 			fragment = viewRequestsFragment;
-			
+
 			break;
 		case 4:
 			Log.d("check", " My Donations Offers- Clicked " + session);
@@ -231,7 +236,7 @@ public class MainActivity extends Activity {
 			viewOffersFragment.setSession(session);
 			viewOffersFragment.setMode(DonateMyStuffGlobals.MODE_OFFERS_LIST);
 			fragment = viewOffersFragment;
-			
+
 			break;
 		case 5:
 			Log.d("check", " All Donations Offers - Clicked " + session);
@@ -246,13 +251,13 @@ public class MainActivity extends Activity {
 			dfRequests.setMode(DonateMyStuffGlobals.MODE_REQUESTS_LIST);
 			dfRequests.setSession(session);
 			fragment = dfRequests;
-			break;			
+			break;
 
 		default:
 			Log.d("check", " Invalid Option... " + position);
 			break;
 		}
-
+		
 		if (fragment != null) {
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction()
@@ -261,7 +266,7 @@ public class MainActivity extends Activity {
 			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);
-			setTitle(session.getUsername()+" "+navMenuTitles[position] );
+			setTitle(session.getUsername() + " " + navMenuTitles[position]);
 			mDrawerLayout.closeDrawer(mDrawerList);
 		} else {
 			// error in creating fragment

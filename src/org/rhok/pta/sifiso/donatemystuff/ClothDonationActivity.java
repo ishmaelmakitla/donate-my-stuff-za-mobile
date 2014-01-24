@@ -14,10 +14,12 @@ import com.android.volley.toolbox.Volley;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -25,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -45,7 +48,8 @@ public class ClothDonationActivity extends Activity {
 	private EditText clothSize;
 	private Spinner clothGender;
 	private EditText clothQuantity;
-
+	private TextView textView4;
+	private Bundle b;
 	private Button clothSubmit;
 	private int gender;
 	private String valid_cloth_name, valid_cloth_size, valid_cloth_quantity;
@@ -64,6 +68,7 @@ public class ClothDonationActivity extends Activity {
 		clothSize = (EditText) findViewById(R.id.clothSize);
 		clothGender = (Spinner) findViewById(R.id.clothGender);
 		clothQuantity = (EditText) findViewById(R.id.clothQuantity);
+		textView4 = (TextView) findViewById(R.id.textView4);
 		clothSubmit = (Button) findViewById(R.id.clothSubmit);
 		clothSubmit.setOnClickListener(submitClothListner);
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -104,8 +109,11 @@ public class ClothDonationActivity extends Activity {
 
 			// if the mode is Requests, disable the Quantity field
 			if (mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
-				clothQuantity.setText("-1");
+				textView4.setVisibility(TextView.GONE);
+				clothQuantity.setVisibility(EditText.GONE);
+				clothQuantity.setText("1");
 				clothQuantity.setEnabled(false);
+				valid_cloth_quantity = clothQuantity.getText().toString();
 			}
 		}
 
@@ -135,9 +143,20 @@ public class ClothDonationActivity extends Activity {
 														.toString(),
 												Toast.LENGTH_LONG).show();
 										if (response.getInt("status") == 0) {
-											clothName.setText(null);
-											clothQuantity.setText(null);
-											clothSize.setText(null);
+											b = new Bundle();
+											b.putSerializable(
+													DonateMyStuffGlobals.KEY_SESSION,
+													session);
+											finish();
+											startActivity(new Intent(
+													getApplicationContext(),
+													ClothDonationActivity.class)
+													.putExtras(b));
+											/*
+											 * clothName.setText(null);
+											 * clothQuantity.setText(null);
+											 * clothSize.setText(null);
+											 */
 										}
 									} catch (JSONException e) {
 										// TODO Auto-generated catch block
@@ -342,7 +361,25 @@ public class ClothDonationActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.cloth_donation, menu);
+
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.back_icon:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

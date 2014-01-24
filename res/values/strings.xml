@@ -82,18 +82,18 @@
     <string name="desc_list_item_icon">Item Icon</string>
     <!-- <string name="title_activity_donate_fragment">DonateFragment</string> -->
 
-    <string name="title_activity_book_donate">BookDonateActivity</string>
-    <string name="title_activity_cloth_donation">ClothDonationActivity</string>
-    <string name="title_activity_shoes_donation">ShoesDonationActivity</string>
-    <string name="title_activity_register_donor">RegisterDonorActivity</string>
-    <string name="title_activity_blanket_donation">BlanketDonationActivity</string>
+    <string name="title_activity_book_donate">Donate Books</string>
+    <string name="title_activity_cloth_donation">Donate Clothes</string>
+    <string name="title_activity_shoes_donation">Donate Shoes</string>
+    <string name="title_activity_register_donor">Register User</string>
+    <string name="title_activity_blanket_donation">Donate Blankets</string>
     <string name="title_activity_uniforms_donation">UniformsDonationActivity</string>
     <string name="title_activity_fragment_request">FragmentRequest</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_view_request">ViewRequestActivity</string>
-    <string name="title_activity_unbidded_request">UnbiddedRequestActivity</string>
-    <string name="title_activity_detail_item_view">DetailItemViewActivity</string>
-    <string name="title_activity_make_request">MakeRequestActivity</string>
+    <string name="title_activity_login">Login Menu</string>
+    <string name="title_activity_view_request">View Donation Request</string>
+    <string name="title_activity_unbidded_request">Unbidded Request</string>
+    <string name="title_activity_detail_item_view">Item Detail View</string>
+    <string name="title_activity_make_request">Make Request</string>
     <string name="prompt_label_request">Please Specify How Many of the Offered Items You Need</string>
     <string name="prompt_label_offer">Please Specify How Many of the Requested Items You Are Offering</string>
 

@@ -155,7 +155,7 @@ public class DetailItemViewActivity extends Activity {
 		} else {
 			item_code.setText("Female");
 		}
-		//donor_quantity.setText(request.getQuantity() + "");
+		// donor_quantity.setText(request.getQuantity() + "");
 	}
 
 	/**
@@ -416,9 +416,9 @@ public class DetailItemViewActivity extends Activity {
 		getMenuInflater().inflate(R.menu.detail_item_view, menu);
 
 		getActionBar().setTitle("Back");
-		getActionBar().setIcon(R.drawable.ic_drawer);
+		getActionBar().setIcon(R.drawable.ic_action_previous_item);
 		getActionBar().setHomeButtonEnabled(true);
-
+		
 		return true;
 	}
 
