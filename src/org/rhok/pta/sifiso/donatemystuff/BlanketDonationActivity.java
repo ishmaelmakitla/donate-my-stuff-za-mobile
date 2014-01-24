@@ -8,6 +8,7 @@ import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -37,7 +38,7 @@ public class BlanketDonationActivity extends Activity {
 			.getSimpleName();
 
 	private static final String MAKE_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/makedonationoffer";
-
+private ActionBarDrawerToggle barDrawerToggle;
 	private EditText quantity;
 	private String valid_quantity;
 	private Button blanketSubmit;
@@ -80,6 +81,7 @@ public class BlanketDonationActivity extends Activity {
 				valid_quantity = quantity.getText().toString();
 			}
 		}
+	
 	}
 
 	private OnClickListener blanketSubmitListner = new OnClickListener() {

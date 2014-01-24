@@ -1,7 +1,6 @@
 package org.rhok.pta.sifiso.donatemystuff;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONException;
@@ -16,7 +15,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -44,6 +45,7 @@ public class ViewDonationActivity extends Activity {
 
 	private static final String GET_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/donationoffers?type=";
 	private ListView listRequest;
+	private TextView results;
 	private OfferAdapter adapter;
 	private String type;
 	private int position;
@@ -73,6 +75,8 @@ public class ViewDonationActivity extends Activity {
 		// append the type parameter
 		serverURL = serverURL + "?type=" + type;
 
+		// textview initialization
+		results = (TextView) findViewById(R.id.result);
 		// check if the items to be shown are those submitted by the user
 		boolean showingMineOnly = b
 				.getBoolean(DonateMyStuffGlobals.FLAG_VIEW_MINE_ONLY);
@@ -99,6 +103,7 @@ public class ViewDonationActivity extends Activity {
 					public void onResponse(String response) {
 						Log.d(TAG, "VolleyResponse::" + response.toString());
 						try {
+
 							if (mode == DonateMyStuffGlobals.MODE_OFFERS_LIST) {
 								processDonationOffers(response);
 							} else {
@@ -150,6 +155,9 @@ public class ViewDonationActivity extends Activity {
 						donationOfferList.add(donationOffer);
 					}
 					listAdapter(donationOfferList);
+				} else {
+					results.setVisibility(TextView.VISIBLE);
+					results.setBackgroundResource(R.drawable.result);
 				}
 
 				return;
@@ -195,8 +203,11 @@ public class ViewDonationActivity extends Activity {
 					}
 					// set them on a list adapter for requests
 					createDonationRequestsListAdapter(donationRequestsList);
-				}
+				} else {
+					results.setVisibility(TextView.VISIBLE);
+					results.setBackgroundResource(R.drawable.result);
 
+				}
 				return;
 			}
 		} else {
@@ -224,11 +235,6 @@ public class ViewDonationActivity extends Activity {
 	 * @param list
 	 */
 	private void listAdapter(List<DonationOffer> list) {
-
-		if (list == null) {
-			list = new ArrayList<DonationOffer>();
-		}
-
 		adapter = new OfferAdapter(getApplicationContext(),
 				R.layout.customize_offer_list, list, session, position);
 		listRequest.setAdapter(adapter);
@@ -238,10 +244,26 @@ public class ViewDonationActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.view_request, menu);
-		getActionBar().setTitle("Back");
-		getActionBar().setIcon(R.drawable.ic_action_previous_item);
-		getActionBar().setHomeButtonEnabled(true);
+
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.back_icon:
+			finish();
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

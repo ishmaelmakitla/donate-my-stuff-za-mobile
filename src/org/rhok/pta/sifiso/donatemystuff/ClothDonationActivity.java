@@ -382,4 +382,6 @@ public class ClothDonationActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	
 }
