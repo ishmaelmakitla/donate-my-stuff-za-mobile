@@ -6,6 +6,8 @@ import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,9 +45,10 @@ public class BookDonateActivity extends Activity {
 	private EditText bookAgeRest;
 	private Button bookSubmit;
 	private TextView textView4;
+	private EditText isbn;
 	private Bundle b;
 	private String valid_book_name, valid_book_size, valid_book_age,
-			valid_book_quantity, valid_book_age_rest;
+			valid_book_quantity, valid_book_age_rest, valid_isbn;
 
 	// the Server URL based on the mode (Request/Offer)
 	private String serverURL = null;
@@ -64,6 +67,7 @@ public class BookDonateActivity extends Activity {
 		bookQuantity = (EditText) findViewById(R.id.bookQuantity);
 		bookAge = (EditText) findViewById(R.id.bookAge);
 		textView4 = (TextView) findViewById(R.id.textView4);
+		isbn = (EditText) findViewById(R.id.isbn);
 		bookSubmit = (Button) findViewById(R.id.bookSubmit);
 		bookSubmit.setOnClickListener(submitBookListner);
 
@@ -103,6 +107,7 @@ public class BookDonateActivity extends Activity {
 		public void onClick(View v) {
 			RequestQueue queue = Volley.newRequestQueue(v.getContext());
 			JSONObject offerJson;
+			textValidation();
 			if (valid_book_name != null && valid_book_age != null
 					&& valid_book_quantity != null
 					&& valid_book_age_rest != null && valid_book_size != null
@@ -124,21 +129,56 @@ public class BookDonateActivity extends Activity {
 											b.putSerializable(
 													DonateMyStuffGlobals.KEY_SESSION,
 													session);
-											/*
-											 * bookName.setText(null);
-											 * bookAge.setText(null);
-											 * bookAgeRest.setText(null);
-											 * bookQuantity.setText(null);
-											 * bookSize.setText(null);
-											 */
-											finish();
-											startActivity(new Intent(
-													getApplicationContext(),
-													BookDonateActivity.class)
-													.putExtras(b));
+											b.putInt(
+													DonateMyStuffGlobals.KEY_MODE,
+													mode);
+											AlertDialog.Builder builder = new AlertDialog.Builder(
+													BookDonateActivity.this);
+											builder.setMessage(
+													response.getString(
+															"message")
+															.toString()
+															+ "\n Do you want to make another offer?")
+													.setCancelable(false)
+													.setPositiveButton(
+															"Yes",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+																	BookDonateActivity.this
+																			.finish();
+																	startActivity(new Intent(
+																			getApplicationContext(),
+																			BookDonateActivity.class)
+																			.putExtras(b));
+																}
+															})
+													.setNegativeButton(
+															"No",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+
+																	BookDonateActivity.this
+																			.finish();
+																	dialog.cancel();
+
+																}
+															});
+
+											AlertDialog alert = builder
+													.create();
+											alert.show();
+
 										}
 									} catch (JSONException e) {
-										// TODO Auto-generated catch block
+
 										e.printStackTrace();
 									}
 
@@ -155,7 +195,7 @@ public class BookDonateActivity extends Activity {
 
 					queue.add(request);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 
@@ -214,6 +254,7 @@ public class BookDonateActivity extends Activity {
 		jsonDonated
 				.put("agerestriction", Integer.parseInt(valid_book_age_rest));
 		jsonDonated.put("type", "book");
+		jsonDonated.put("isbn", valid_isbn);
 
 		json.put("item", jsonDonated);
 
@@ -240,20 +281,18 @@ public class BookDonateActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
+
 				Is_Valid_Book_Name(bookName);
 			}
 		});
@@ -262,21 +301,19 @@ public class BookDonateActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Book_Size_Validation(1, 4, bookSize);
+
+				Is_Valid_Book_Size_Validation(0, 4, bookSize);
 			}
 		});
 		bookAge.addTextChangedListener(new TextWatcher() {
@@ -284,21 +321,19 @@ public class BookDonateActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Book_Age_Validation(1, 5, bookAge);
+
+				Is_Valid_Book_Age_Validation(0, 5, bookAge);
 			}
 		});
 		bookQuantity.addTextChangedListener(new TextWatcher() {
@@ -306,21 +341,19 @@ public class BookDonateActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Book_Quantity_Validation(1, 4, bookQuantity);
+
+				Is_Valid_Book_Quantity_Validation(0, 4, bookQuantity);
 			}
 		});
 		bookAgeRest.addTextChangedListener(new TextWatcher() {
@@ -328,21 +361,39 @@ public class BookDonateActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Book_Age_Rest_Validation(1, 4, bookAgeRest);
+
+				Is_Valid_Book_Age_Rest_Validation(0, 4, bookAgeRest);
+			}
+		});
+		isbn.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+				Is_Isbn_Validation(0, 10, isbn);
 			}
 		});
 	}
@@ -395,6 +446,21 @@ public class BookDonateActivity extends Activity {
 			return false;
 		} else {
 			valid_book_age = edt.getText().toString();
+			return true;
+		}
+
+	}
+
+	public boolean Is_Isbn_Validation(int MinLen, int MaxLen, EditText edt)
+			throws NumberFormatException {
+	
+		if (Double.valueOf(edt.getText().toString()) < MinLen
+				|| Double.valueOf(edt.getText().length()) > MaxLen) {
+			edt.setError("Out of Range " + MinLen + " or " + MaxLen);
+			valid_isbn = null;
+			return false;
+		} else {
+			valid_isbn = edt.getText().toString();
 			return true;
 		}
 
@@ -453,7 +519,7 @@ public class BookDonateActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.back_icon:
-			finish();
+			BookDonateActivity.this.finish();
 			break;
 
 		default:
@@ -461,6 +527,5 @@ public class BookDonateActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 
 }

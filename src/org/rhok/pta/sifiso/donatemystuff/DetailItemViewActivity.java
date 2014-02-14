@@ -28,6 +28,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -59,11 +60,15 @@ public class DetailItemViewActivity extends Activity {
 	EditText item_name;
 	EditText item_code;
 	EditText donor_quantity;
+	private TextView textView4;
+	private TextView txtIsbn;
+	private EditText isbn;
 	Button requestSubmit;
 	private String valid_donor_input;
 	private ActionBar bar;
 	DonationOffer offer;
 	DonationRequest request;
+	private Bundle b;
 	// number of items to bid for
 	int itemCount = 0;
 	// the current mode of this UI
@@ -76,7 +81,7 @@ public class DetailItemViewActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		// setContentView(R.layout.activity_detail_item_view);
 		Bundle b = getIntent().getExtras();
 		if (b.containsKey(KEY_OFFER)) {
 			setContentView(R.layout.detail_request_items);
@@ -94,6 +99,9 @@ public class DetailItemViewActivity extends Activity {
 		item_name = (EditText) findViewById(R.id.item_name);
 		item_code = (EditText) findViewById(R.id.item_code);
 		donor_quantity = (EditText) findViewById(R.id.donor_quantity);
+		textView4 = (TextView) findViewById(R.id.textView4);
+		txtIsbn = (TextView) findViewById(R.id.txtIsbn);
+		isbn = (EditText) findViewById(R.id.isbn);
 
 		requestSubmit = (Button) findViewById(R.id.requestSubmit);
 		requestSubmit.setOnClickListener(onSubmitRequestClick);
@@ -119,6 +127,7 @@ public class DetailItemViewActivity extends Activity {
 				mode = REQUEST;
 			}
 			// load the request
+
 			loadDonationRequest(request);
 		}
 
@@ -130,9 +139,22 @@ public class DetailItemViewActivity extends Activity {
 	 * @param offer
 	 */
 	private void loadDonationOffer(DonationOffer offer) {
+		b = getIntent().getExtras();
 		donor_id.setText(offer.getId());
 		donated_date.setText(offer.getOfferDate().toString());
 		item_name.setText(offer.getItem().getName());
+		if (b.getString("type").equals("books")) {
+			txtIsbn.setVisibility(TextView.VISIBLE);
+			isbn.setVisibility(EditText.VISIBLE);
+			item_code.setVisibility(EditText.GONE);
+			textView4.setVisibility(TextView.GONE);
+		}
+		if (b.getString("type").equals("blankets")) {
+			item_code.setVisibility(EditText.GONE);
+			textView4.setVisibility(TextView.GONE);
+		}
+		isbn.setText(offer.getItem().getIsbn());
+
 		if (offer.getItem().getGenderCode() == 0) {
 			item_code.setText("Male");
 		} else {
@@ -147,9 +169,22 @@ public class DetailItemViewActivity extends Activity {
 	 * @param offer
 	 */
 	private void loadDonationRequest(DonationRequest request) {
+		b = getIntent().getExtras();
 		donor_id.setText(request.getId());
 		// donated_date.setText(request.getRequestDate().toString());
 		item_name.setText(request.getRequestedDonationItem().getName());
+		if (b.getString("type").equals("books")) {
+			txtIsbn.setVisibility(TextView.VISIBLE);
+			isbn.setVisibility(EditText.VISIBLE);
+			item_code.setVisibility(EditText.GONE);
+			textView4.setVisibility(TextView.GONE);
+		}
+		if (b.getString("type").equals("blankets")) {
+			item_code.setVisibility(EditText.GONE);
+			textView4.setVisibility(TextView.GONE);
+		}
+		isbn.setText(offer.getItem().getIsbn());
+
 		if (request.getRequestedDonationItem().getGenderCode() == 0) {
 			item_code.setText("Male");
 		} else {
@@ -415,11 +450,26 @@ public class DetailItemViewActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.detail_item_view, menu);
 
-		getActionBar().setTitle("Back");
-		getActionBar().setIcon(R.drawable.ic_action_previous_item);
-		getActionBar().setHomeButtonEnabled(true);
-		
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.back_icon:
+			DetailItemViewActivity.this.finish();
+			break;
+
+		default:
+			break;
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 }

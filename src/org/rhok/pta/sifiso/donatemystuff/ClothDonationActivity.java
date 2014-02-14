@@ -14,6 +14,8 @@ import com.android.volley.toolbox.Volley;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -125,6 +127,7 @@ public class ClothDonationActivity extends Activity {
 		public void onClick(View v) {
 			RequestQueue queue = Volley.newRequestQueue(v.getContext());
 			JSONObject offerJson;
+			textValidater();
 			if (valid_cloth_name != null && valid_cloth_quantity != null
 					&& valid_cloth_size != null && session.getUserID() != null) {
 				try {
@@ -137,29 +140,62 @@ public class ClothDonationActivity extends Activity {
 								@Override
 								public void onResponse(JSONObject response) {
 									try {
-										Toast.makeText(
-												getApplicationContext(),
-												response.getString("message")
-														.toString(),
-												Toast.LENGTH_LONG).show();
+
 										if (response.getInt("status") == 0) {
 											b = new Bundle();
 											b.putSerializable(
 													DonateMyStuffGlobals.KEY_SESSION,
 													session);
-											finish();
-											startActivity(new Intent(
-													getApplicationContext(),
-													ClothDonationActivity.class)
-													.putExtras(b));
-											/*
-											 * clothName.setText(null);
-											 * clothQuantity.setText(null);
-											 * clothSize.setText(null);
-											 */
+											b.putInt(
+													DonateMyStuffGlobals.KEY_MODE,
+													mode);
+											AlertDialog.Builder builder = new AlertDialog.Builder(
+													ClothDonationActivity.this);
+											builder.setMessage(
+													response.getString(
+															"message")
+															.toString()
+															+ "\n Do you want to make another offer?")
+													.setCancelable(false)
+													.setPositiveButton(
+															"Yes",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+																	ClothDonationActivity.this
+																			.finish();
+																	startActivity(new Intent(
+																			getApplicationContext(),
+																			ClothDonationActivity.class)
+																			.putExtras(b));
+																}
+															})
+													.setNegativeButton(
+															"No",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+
+																	ClothDonationActivity.this
+																			.finish();
+																	dialog.cancel();
+
+																}
+															});
+
+											AlertDialog alert = builder
+													.create();
+											alert.show();
+
 										}
 									} catch (JSONException e) {
-										// TODO Auto-generated catch block
+
 										e.printStackTrace();
 									}
 								}
@@ -176,7 +212,7 @@ public class ClothDonationActivity extends Activity {
 
 					queue.add(request);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 
@@ -208,6 +244,7 @@ public class ClothDonationActivity extends Activity {
 		}
 
 		// donated item
+		Log.e(TAG, "iminyaka " +gender+"");
 		JSONObject jsonDonated = new JSONObject();
 		jsonDonated.put("name", valid_cloth_name);
 		jsonDonated.put("size", valid_cloth_size);
@@ -240,20 +277,18 @@ public class ClothDonationActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
+
 				Is_Valid_Cloth_Name(clothName);
 			}
 		});
@@ -262,21 +297,19 @@ public class ClothDonationActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Book_Size_Validation(1, 4, clothSize);
+
+				Is_Valid_Book_Size_Validation(0, 4, clothSize);
 			}
 		});
 		clothQuantity.addTextChangedListener(new TextWatcher() {
@@ -284,21 +317,19 @@ public class ClothDonationActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Book_Quantity_Validation(1, 4, clothQuantity);
+
+				Is_Valid_Book_Quantity_Validation(0, 4, clothQuantity);
 			}
 		});
 
@@ -374,7 +405,7 @@ public class ClothDonationActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.back_icon:
-			finish();
+			ClothDonationActivity.this.finish();
 			break;
 
 		default:
@@ -383,5 +414,4 @@ public class ClothDonationActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	
 }

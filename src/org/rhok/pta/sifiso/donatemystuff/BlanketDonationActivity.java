@@ -6,9 +6,10 @@ import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,11 +39,12 @@ public class BlanketDonationActivity extends Activity {
 			.getSimpleName();
 
 	private static final String MAKE_DONATION_OFFER_SERVLET_URL = "http://za-donate-my-stuff.appspot.com/makedonationoffer";
-private ActionBarDrawerToggle barDrawerToggle;
+	
 	private EditText quantity;
 	private String valid_quantity;
 	private Button blanketSubmit;
 	private Bundle b;
+
 	// the Server URL based on the mode (Request/Offer)
 	private String serverURL = null;
 	// session
@@ -58,7 +60,6 @@ private ActionBarDrawerToggle barDrawerToggle;
 
 		blanketSubmit = (Button) findViewById(R.id.blanketSubmit);
 		blanketSubmit.setOnClickListener(blanketSubmitListner);
-
 		// check the mode or source of invoking this Intent (was it in Offers or
 		// Requests)
 		Bundle extras = getIntent().getExtras();
@@ -76,12 +77,12 @@ private ActionBarDrawerToggle barDrawerToggle;
 
 			// if the mode is Requests, disable the Quantity field
 			if (mode == DonateMyStuffGlobals.MODE_REQUESTS_LIST) {
-				quantity.setText("1");
+				quantity.setText("-1");
 				quantity.setEnabled(false);
 				valid_quantity = quantity.getText().toString();
 			}
 		}
-	
+
 	}
 
 	private OnClickListener blanketSubmitListner = new OnClickListener() {
@@ -96,7 +97,7 @@ private ActionBarDrawerToggle barDrawerToggle;
 				@Override
 				public void onTextChanged(CharSequence s, int start,
 						int before, int count) {
-					// TODO Auto-generated method stub
+					
 					Log.d(TAG, "Quantity1 " + valid_quantity + " and UserId "
 							+ session.getUserID());
 				}
@@ -104,19 +105,20 @@ private ActionBarDrawerToggle barDrawerToggle;
 				@Override
 				public void beforeTextChanged(CharSequence s, int start,
 						int count, int after) {
-					// TODO Auto-generated method stub
+
 					Log.d(TAG, "Quantity2 " + valid_quantity + " and UserId "
 							+ session.getUserID());
 				}
 
 				@Override
 				public void afterTextChanged(Editable s) {
-					// TODO Auto-generated method stub
+
 					Log.d(TAG, "Quantity3 " + valid_quantity + " and UserId "
 							+ session.getUserID());
-					Is_Valid_Quantity_Validation(1, 4, quantity);
+					Is_Valid_Quantity_Validation(0, 4, quantity);
 				}
 			});
+			Is_Valid_Quantity_Validation(0, 4, quantity);
 			Log.d(TAG,
 					"Quantity " + valid_quantity + " and UserId "
 							+ session.getUserID());
@@ -132,26 +134,65 @@ private ActionBarDrawerToggle barDrawerToggle;
 								@Override
 								public void onResponse(JSONObject response) {
 									try {
-										Toast.makeText(
-												getApplicationContext(),
-												response.getString("message")
-														.toString(),
-												Toast.LENGTH_SHORT).show();
+
 										if (response.getInt("status") == 0) {
 											b = new Bundle();
 											b.putSerializable(
 													DonateMyStuffGlobals.KEY_SESSION,
 													session);
-											finish();
-											startActivity(new Intent(
-													getApplicationContext(),
-													BlanketDonationActivity.class)
-													.putExtras(b));
+											b.putInt(
+													DonateMyStuffGlobals.KEY_MODE,
+													mode);
+
+											AlertDialog.Builder builder = new AlertDialog.Builder(
+													BlanketDonationActivity.this);
+											builder.setMessage(
+													response.getString(
+															"message")
+															.toString()
+															+ "\n Do you want to make another offer?")
+													.setCancelable(false)
+													.setPositiveButton(
+															"Yes",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+																	BlanketDonationActivity.this
+																			.finish();
+																	startActivity(new Intent(
+																			getApplicationContext(),
+																			BlanketDonationActivity.class)
+																			.putExtras(b));
+																}
+															})
+													.setNegativeButton(
+															"No",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+
+																	BlanketDonationActivity.this
+																			.finish();
+																	dialog.cancel();
+
+																}
+															});
+
+											AlertDialog alert = builder
+													.create();
+											alert.show();
+
 											// quantity.setText(null);
-											finish();
+
 										}
 									} catch (JSONException e) {
-										// TODO Auto-generated catch block
+
 										e.printStackTrace();
 									}
 								}
@@ -168,7 +209,7 @@ private ActionBarDrawerToggle barDrawerToggle;
 
 					queue.add(request);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 
@@ -257,8 +298,7 @@ private ActionBarDrawerToggle barDrawerToggle;
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.back_icon:
-
-			finish();
+			BlanketDonationActivity.this.finish();
 			break;
 
 		default:

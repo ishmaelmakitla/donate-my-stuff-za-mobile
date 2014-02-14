@@ -18,6 +18,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -336,7 +337,7 @@ public class RegisterDonorActivity extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				Is_Valid_Cell_Number_Validation(1, 10, mobile);
+				Is_Valid_Cell_Number_Validation(0, 9, mobile);
 			}
 		});
 		telephone.addTextChangedListener(new TextWatcher() {
@@ -358,7 +359,7 @@ public class RegisterDonorActivity extends Activity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				Is_Valid_Phone_Number_Validation(1, 10, telephone);
+				Is_Valid_Phone_Number_Validation(0, 9, telephone);
 			}
 		});
 
@@ -625,6 +626,24 @@ public class RegisterDonorActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.register_donor, menu);
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.back_icon:
+			RegisterDonorActivity.this.finish();
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

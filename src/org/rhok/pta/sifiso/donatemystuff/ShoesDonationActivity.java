@@ -5,17 +5,11 @@ import org.json.JSONObject;
 import org.rhok.pta.sifiso.donatemystuff.model.UserSession;
 import org.rhok.pta.sifiso.donatemystuff.util.DonateMyStuffGlobals;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import android.hardware.Camera.Size;
-import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,6 +24,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 /**
  * 
@@ -124,6 +125,7 @@ public class ShoesDonationActivity extends Activity {
 		public void onClick(View v) {
 			RequestQueue queue = Volley.newRequestQueue(v.getContext());
 			JSONObject offerJson;
+			textValidation();
 			if (valid_shoe_name != null && valid_shoe_quantity != null
 					&& valid_shoe_size != null && session.getUserID() != null) {
 				try {
@@ -137,17 +139,59 @@ public class ShoesDonationActivity extends Activity {
 								@Override
 								public void onResponse(JSONObject response) {
 									try {
-										Toast.makeText(
-												getApplicationContext(),
-												response.getString("message")
-														.toString(),
-												Toast.LENGTH_LONG).show();
+
 										if (response.getInt("status") == 0) {
 											b = new Bundle();
 											b.putSerializable(
 													DonateMyStuffGlobals.KEY_SESSION,
 													session);
-											finish();
+											b.putInt(
+													DonateMyStuffGlobals.KEY_MODE,
+													mode);
+											AlertDialog.Builder builder = new AlertDialog.Builder(
+													ShoesDonationActivity.this);
+											builder.setMessage(
+													response.getString(
+															"message")
+															.toString()
+															+ "\n Do you want to make another offer?")
+													.setCancelable(false)
+													.setPositiveButton(
+															"Yes",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+
+																	ShoesDonationActivity.this
+																			.finish();
+																	startActivity(new Intent(
+																			getApplicationContext(),
+																			ShoesDonationActivity.class)
+																			.putExtras(b));
+																}
+															})
+													.setNegativeButton(
+															"No",
+															new DialogInterface.OnClickListener() {
+
+																@Override
+																public void onClick(
+																		DialogInterface dialog,
+																		int id) {
+
+																	ShoesDonationActivity.this
+																			.finish();
+																	dialog.cancel();
+
+																}
+															});
+
+											AlertDialog alert = builder
+													.create();
+											alert.show();
 											startActivity(new Intent(
 													getApplicationContext(),
 													ShoesDonationActivity.class)
@@ -160,7 +204,7 @@ public class ShoesDonationActivity extends Activity {
 
 										}
 									} catch (JSONException e) {
-										// TODO Auto-generated catch block
+
 										e.printStackTrace();
 									}
 								}
@@ -177,7 +221,7 @@ public class ShoesDonationActivity extends Activity {
 
 					queue.add(request);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 				shoeName.setText(null);
@@ -240,20 +284,18 @@ public class ShoesDonationActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
+
 				Is_Valid_Shoe_Name(shoeName);
 			}
 		});
@@ -262,21 +304,19 @@ public class ShoesDonationActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Shoe_Size_Validation(1, 4, shoeSize);
+
+				Is_Valid_Shoe_Size_Validation(0, 4, shoeSize);
 			}
 		});
 		shoeQuantity.addTextChangedListener(new TextWatcher() {
@@ -284,21 +324,19 @@ public class ShoesDonationActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				Is_Valid_Shoe_Quantity_Validation(1, 4, shoeQuantity);
+
+				Is_Valid_Shoe_Quantity_Validation(0, 4, shoeQuantity);
 			}
 		});
 
@@ -374,7 +412,7 @@ public class ShoesDonationActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.back_icon:
-			finish();
+			ShoesDonationActivity.this.finish();
 			break;
 
 		default:
@@ -382,7 +420,5 @@ public class ShoesDonationActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	
 
 }

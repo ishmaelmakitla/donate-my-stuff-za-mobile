@@ -14,6 +14,7 @@ public class DonatedItem implements Serializable {
 	private String id;
 	private String name;
 	private int gendercode;
+	private String isbn;
 	int size = 0;
 	int agerestriction = 0;
 	int age = 0;
@@ -23,6 +24,21 @@ public class DonatedItem implements Serializable {
 
 	public DonatedItem() {
 		this.id = UUID.randomUUID().toString();
+	}
+
+	/**
+	 * @return the isbn
+	 */
+	public String getIsbn() {
+		return isbn;
+	}
+
+	/**
+	 * @param isbn
+	 *            the isbn to set
+	 */
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 	public String getType() {

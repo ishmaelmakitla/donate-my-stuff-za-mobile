@@ -7,8 +7,24 @@ public class Item {
 	private int agerestriction = 0;
 	private int age = 0;
 	private String type;
+	private String isbn;
 
 	public Item() {
+	}
+
+	/**
+	 * @return the isbn
+	 */
+	public String getIsbn() {
+		return isbn;
+	}
+
+	/**
+	 * @param isbn
+	 *            the isbn to set
+	 */
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 	public String getId() {
