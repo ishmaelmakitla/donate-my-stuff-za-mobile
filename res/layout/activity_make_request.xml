@@ -103,6 +103,9 @@
                 android:id="@+id/uniformSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/round_l"
                 android:text="make request" />
         </LinearLayout>
     </ScrollView>

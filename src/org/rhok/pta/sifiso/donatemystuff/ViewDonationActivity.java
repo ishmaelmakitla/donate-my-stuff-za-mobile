@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -237,6 +239,10 @@ public class ViewDonationActivity extends Activity {
 	private void listAdapter(List<DonationOffer> list) {
 		adapter = new OfferAdapter(getApplicationContext(),
 				R.layout.customize_offer_list, list, session, position);
+		Animation hyperspaceJump = AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.up_from_bottom);
+		// start animation for image
+		listRequest.startAnimation(hyperspaceJump);
 		listRequest.setAdapter(adapter);
 	}
 

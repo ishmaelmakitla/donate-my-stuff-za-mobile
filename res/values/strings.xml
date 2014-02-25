@@ -89,7 +89,7 @@
     <string name="title_activity_blanket_donation">Donate Blankets</string>
     <string name="title_activity_uniforms_donation">UniformsDonationActivity</string>
     <string name="title_activity_fragment_request">FragmentRequest</string>
-    <string name="title_activity_login">Login Menu</string>
+    <string name="title_activity_login">Donate-My-Stuff</string>
     <string name="title_activity_view_request">View Donation Request</string>
     <string name="title_activity_unbidded_request">Unbidded Request</string>
     <string name="title_activity_detail_item_view">Item Detail View</string>

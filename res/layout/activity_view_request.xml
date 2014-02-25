@@ -9,9 +9,13 @@
         android:id="@+id/listRequest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true" 
+        android:background="@drawable/list"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp">
     </ListView>
 
+    
     <TextView
         android:id="@+id/result"
         android:layout_width="match_parent"
@@ -20,6 +24,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="85dp"
         android:textAlignment="gravity"
+          
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:visibility="gone" />
 

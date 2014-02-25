@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -62,6 +64,7 @@ public class BlanketDonationActivity extends Activity {
 		blanketSubmit.setOnClickListener(blanketSubmitListner);
 		// check the mode or source of invoking this Intent (was it in Offers or
 		// Requests)
+		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			// get the mode
