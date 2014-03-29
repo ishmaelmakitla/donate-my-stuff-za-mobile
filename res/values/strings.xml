@@ -94,7 +94,7 @@
     <string name="title_activity_unbidded_request">Unbidded Request</string>
     <string name="title_activity_detail_item_view">Item Detail View</string>
     <string name="title_activity_make_request">Make Request</string>
-    <string name="prompt_label_request">Please Specify How Many of the Offered Items You Need</string>
+    <string name="prompt_label_request">Please Spec ify How Many of the Offered Items You Need</string>
     <string name="prompt_label_offer">Please Specify How Many of the Requested Items You Are Offering</string>
 
 </resources>
