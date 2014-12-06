@@ -97,4 +97,7 @@
     <string name="prompt_label_request">Please Spec ify How Many of the Offered Items You Need</string>
     <string name="prompt_label_offer">Please Specify How Many of the Requested Items You Are Offering</string>
 
+    <!-- Gabriel labels -->
+    <string name="menu_submit_label">Submit</string>
+    <string name="menu_register_label">Register</string>
 </resources>

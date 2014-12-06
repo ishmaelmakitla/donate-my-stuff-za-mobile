@@ -7,7 +7,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context=".LoginActivity" >
+    
+  
 
+    <!-- Button
+        android:id="@+id/create_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_l"
+        android:text="create account" /-->
+    
+
+   
+    
+    
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
@@ -39,21 +53,13 @@
         android:ems="10"
         
         android:inputType="textPassword" />
-
-    <Button
+      <Button
         android:id="@+id/log_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="120dp"
         android:background="@drawable/round"
         android:text="LOGIN" />
-
-    <Button
-        android:id="@+id/create_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/round_l"
-        android:text="create account" />
+     
 
 </LinearLayout>
