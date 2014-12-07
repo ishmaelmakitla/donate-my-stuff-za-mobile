@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -43,13 +44,16 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		setField();
 	}
+	
 
 	private void setField() {
 		log_username = (EditText) findViewById(R.id.log_username);
 		log_password = (EditText) findViewById(R.id.log_password);
 		log_submit = (Button) findViewById(R.id.log_submit);
-		create_account = (Button) findViewById(R.id.create_account);
-		create_account.setOnClickListener(new View.OnClickListener() {
+		
+		
+		//create_account = (Button) findViewById(R.id.create_account);
+		/*create_account.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -58,7 +62,7 @@ public class LoginActivity extends Activity {
 				finish();
 
 			}
-		});
+		});*/
 		log_submit.setOnClickListener(logSubmitListner);
 	}
 
@@ -151,8 +155,32 @@ public class LoginActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.login, menu);
+		getMenuInflater().inflate(R.menu.login_menu, menu);
 		return true;
 	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {		
+		int selectedItem = item.getItemId();
+		Log.d(TAG, "Selected =" + selectedItem);
+		switch(selectedItem){
+		case R.id.action_register_new:
+							startActivity(new Intent(getApplicationContext(),
+						RegisterDonorActivity.class));
+				finish();
+
+			
+			Toast.makeText(this, "User Clicked Register", Toast.LENGTH_LONG).show();
+			break;
+			default:
+				Log.d(TAG, "Default..");
+				break;
+			
+		}
+		
+		return true;
+	}
+	
 
 }
