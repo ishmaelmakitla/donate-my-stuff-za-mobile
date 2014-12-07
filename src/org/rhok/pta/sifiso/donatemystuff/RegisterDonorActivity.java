@@ -126,6 +126,7 @@ public class RegisterDonorActivity extends Activity {
 									Toast.makeText(getApplicationContext(),
 											"Registered successfully",
 											Toast.LENGTH_LONG).show();
+									finish();
 									try {
 										if (response.getInt("status") == 0) {
 											name.setText(null);
